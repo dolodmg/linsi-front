@@ -26,4 +26,22 @@ body {
   }
 }
 
+@keyframes backgroundAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-animated {
+  background: linear-gradient(270deg, rgba(255, 126, 95, 0.7), rgba(134, 227, 206, 0.7), rgba(212, 252, 121, 0.7));
+  background-size: 400% 400%;
+  animation: backgroundAnimation 10s ease infinite;
+}
+
 
