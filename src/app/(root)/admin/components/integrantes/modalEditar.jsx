@@ -22,21 +22,20 @@ const ModalEditar = ({ isOpen, onClose }) => {
     const [editing, setEditing] = useState(false);
     const [error, setError] = useState(null);
     const methods = useForm();
-    const [fileImage, setFileImage] = useState(null);
-
+    
     useEffect(() => {
         if (member) {
             setFirstName(member.firstName);
             setLastName(member.lastName);
             setEmail(member.email);
-            setRoleId(member.role.id);
+            setRoleId(member.role.id)
             setImage(member.s3Url);
             
             methods.reset({
                 firstName: member.firstName,
                 lastName: member.lastName,
                 email: member.email,
-                role: member.role.name,
+                role: member.role.id, 
                 roleId: member.role.id,
                 image: member.s3Url
             });
@@ -50,8 +49,8 @@ const ModalEditar = ({ isOpen, onClose }) => {
         formData.append('firstName', data.firstName);
         formData.append('lastName', data.lastName);
         formData.append('email', data.email);
-        formData.append('role_id', data.roleId);
-    
+        formData.append('role_id', data.role);
+
         if (image) {
             if (image instanceof File) {
                 formData.append('image', image);
@@ -89,7 +88,7 @@ const ModalEditar = ({ isOpen, onClose }) => {
                                             <LastNameLabel name="lastName" labelLastName="Apellido" defaultValue={lastName} />
                                         </div>
                                         <EmailLabel name="email" labelEmail="Email" defaultValue={email} />
-                                        <RoleLabel name="role" labelRole="Rol" placeholder={member?.role?.name} defaultValue={member?.role?.name}/>
+                                        <RoleLabel name="role" labelRole="Rol" placeholder={member?.role?.name} defaultValue={member?.role?.id}/>
                                     </div>
                                     {error && <p className="text-red-500">{error}</p>}
                                 </div>

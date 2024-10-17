@@ -39,13 +39,15 @@ const RoleLabel = ({ name, labelRole, placeholder, defaultValue }) => {
             aria-label="Seleccionar rol"
             isInvalid={!!errors[name]}
             errorMessage={errors[name]?.message}
+            value={field.value}
             onChange={(e) => {
-              field.onChange(e);
-              setRoleId(e.target.value);
+              const selectedRoleId = e.target.value;
+              field.onChange(selectedRoleId);
+              setRoleId(selectedRoleId);
             }}
           >
             {roles.map((rol) => (
-              <SelectItem key={rol.id} value={rol.id} className='text-black'>
+              <SelectItem key={rol.id} value={rol.id.toString()} className='text-black'>
                 {rol.name}
               </SelectItem>
             ))}
