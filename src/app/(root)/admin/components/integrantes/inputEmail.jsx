@@ -1,28 +1,27 @@
 "use client"
+import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
 
-const EmailLabel = ({ name, labelEmail, actualEmail }) => {
+const EmailLabel = ({ name, labelEmail, defaultValue }) => {
   const { control, formState: { errors } } = useFormContext();
 
   return (
-    <>
-        <label htmlFor={name}>{labelEmail}</label>
-        <Controller
-            name={name}
-            control={control}
-            defaultValue={actualEmail}
-            render={({ field }) => (
-            <Input
-                {...field}
-                aria-label="Email"
-                id={name}
-                type="text"
-                placeholder={actualEmail}
-            />
-            )}
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field }) => (
+        <Input
+          {...field}
+          label={labelEmail}
+          id={name}
+          placeholder={defaultValue}
+          isInvalid={!!errors[name]}
+          className='text-black'
         />
-      </>
+      )}
+    />
   );
 };
 

@@ -2,6 +2,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Hind } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import Link from 'next/link'
 
 const hind = Hind({ 
@@ -16,13 +17,9 @@ const navigation = [
     { name: 'INTEGRANTES', href: '/integrantes', current: false },
 ]
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
 const Navbar = () => {
   return (
-    <Disclosure as="nav" className={classNames(hind.className, 'bg-white')}>
+    <Disclosure as="nav" className={`${hind.className} bg-white drop-shadow-md`}>
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-2">
@@ -44,10 +41,7 @@ const Navbar = () => {
                     <a
                       key={item.name}
                       href={item.href}
-                      className={classNames(
-                        item.current ? 'text-blue-700' : 'text-blue-700',
-                        'rounded-md px-3 py-2 text-sm font-bold'
-                      )}
+                      className='text-blue-700 font-bold px-6 text-md'
                       aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
@@ -68,23 +62,18 @@ const Navbar = () => {
             </div>
           </div>
 
-          <DisclosurePanel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
+          <DisclosurePanel className="sm:hidden flex flex-col font-bold space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
                 <DisclosureButton
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-white text-blue-700' : 'text-blue-700',
-                    'block rounded-md px-3 py-2 text-base font-bold'
-                  )}
+                  className='bg-white text-blue-700' 
                   aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
                 </DisclosureButton>
               ))}
-            </div>
           </DisclosurePanel>
         </>
       )}
