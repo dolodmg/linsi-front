@@ -8,7 +8,7 @@ const bree = Bree_Serif({
     weight: ['400']
 })
 
-export const RoleName = ({ roles, members }) => {
+export const RoleName = ({ roles, members, areasByMember }) => {
     return (
         <>
             {roles.length > 0 ? (
@@ -17,7 +17,7 @@ export const RoleName = ({ roles, members }) => {
                     return (
                         <div key={role.id} className='flex flex-col items-center justify-center'>
                             <h1 className={`${bree.className} text-xl text-bg-blue mt-4`}>{role.name}</h1>
-                            <MemberContainer members={filteredMembers} />
+                            <MemberContainer members={filteredMembers} areasByMember={areasByMember} />
                         </div>
                     );
                 })

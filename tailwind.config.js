@@ -23,11 +23,12 @@ module.exports = {
         foreground: "var(--foreground)",
         'bg-blue': '#1A3A68',
         'bg-light-grey': '#F0F0F0',
-        'card-grey': '#D9D9D9'
+        'card-grey': '#D9D9D9',
+        'light-blue': '#66A3BD'
       },
     },
   },
-  plugins: [nextui(),
+  plugins: [nextui()
   ],
   
 };

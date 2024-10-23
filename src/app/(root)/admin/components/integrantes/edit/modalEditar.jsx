@@ -1,16 +1,16 @@
 "use client"
-import React, { useState, useEffect, memo } from 'react';
-import { Modal, ModalContent, Button } from '@nextui-org/react';
+import React, { useState, useEffect } from 'react';
+import { Modal, ModalContent } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useMemberEditStore, useFormStoreMember } from '@/app/store';
 import { editMemberAction } from '@/actions/member';
-import NameLabel from './inputFirstName';
-import LastNameLabel from './inputLastName';
-import EmailLabel from './inputEmail';
-import RoleLabel from './inputRole';
-import ImageInput from './inputImage';
+import NameLabel from './firstNameInput';
+import LastNameLabel from './lastNameInput';
+import EmailLabel from './emailInput';
+import RoleLabel from './roleInput';
+import ImageInput from './imageInput';
 import { useForm, FormProvider } from "react-hook-form";
-import ButtonsEditar from './buttonsEditar';
+import ButtonsAction from '../../buttonsAction';
 
 const ModalEditar = ({ isOpen, onClose }) => {
     const { member } = useMemberEditStore();
@@ -92,7 +92,7 @@ const ModalEditar = ({ isOpen, onClose }) => {
                                     </div>
                                     {error && <p className="text-red-500">{error}</p>}
                                 </div>
-                                <ButtonsEditar editing={editing} onClose={onClose} />
+                                <ButtonsAction isLoading={editing} onClose={onClose} submitLabel="Guardar cambios"/>
                             </form>
                         </FormProvider>
                     </div>    

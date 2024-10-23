@@ -5,30 +5,43 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button
 import { useForm, FormProvider } from "react-hook-form";
 import { useMemberEditStore } from "@/app/store";
 import EditIcon from '@mui/icons-material/Edit';
-import ModalEditar from './modalEditar'; 
+import ModalEditar from './edit/modalEditar'; 
+import AddButton from '../addButton';
+import ModalAgregar from './add/modalAgregar';
 
 const inter = Inter({ subsets: ['latin'] },
  { weights: ['400, 500, 600, 700'] }
 );
 
 export const TableIntegrantes = ({ members }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const { setMemberStore } = useMemberEditStore();
   const methods = useForm();
 
   const handleEditClick = (memberToEdit) => {
     setMemberStore(memberToEdit);
-    setIsModalOpen(true);
+    setIsModalEditOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalEditOpen(false);
     setMemberStore(null);
   };
+
+  const handleAddClick = () => {
+    setIsModalAddOpen(true);
+  }
+
+  const handleAddClose = () => {
+    setIsModalAddOpen(false);
+  }
   
   return (
+    <>
+    <AddButton onClick={handleAddClick} component='integrante' />
     <FormProvider {...methods}>
-      <Table aria-label="Example table with custom cells">
+      <Table aria-label="Example table with custom cells" className='mt-2'>
         <TableHeader>
           <TableColumn>NOMBRE</TableColumn>
           <TableColumn>APELLIDO</TableColumn>
@@ -43,7 +56,7 @@ export const TableIntegrantes = ({ members }) => {
               <TableCell className={`${inter.className} text-black`}>{memberItem.firstName}</TableCell>
               <TableCell className={`${inter.className} text-black`}>{memberItem.lastName}</TableCell>
               <TableCell className={`${inter.className} text-black`}>{memberItem.email}</TableCell>
-              <TableCell className={`${inter.className} text-black`}>{memberItem.role.name}</TableCell>
+              <TableCell className={`${inter.className} text-black`}>{memberItem.role?.name}</TableCell>
               <TableCell>
                 <img src={memberItem.s3Url} 
                 alt={`${memberItem.firstName} ${memberItem.lastName}`} 
@@ -62,7 +75,9 @@ export const TableIntegrantes = ({ members }) => {
           ))}
         </TableBody>
       </Table>
-      <ModalEditar isOpen={isModalOpen} onClose={handleCloseModal} />
+      <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
+      <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
     </FormProvider>
+    </>
   );
 };

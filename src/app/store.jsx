@@ -30,3 +30,29 @@ export const useMemberEditStore = create(set => {
         setMemberStore: (memb) => set({member: memb})
     }
 })
+
+export const useFormStoreProject = create(set => {
+    return {
+        name: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        setName: (newName) => set({ name: newName }),
+        setDescription: (newDescription) => set({ description: newDescription }),
+        setStartDate: (newStartDate) => set({ startDate: newStartDate }),
+        setEndDate: (newEndDate) => set({ endDate: newEndDate }),
+        resetForm: () => set(state => ({ 
+            name: '',
+            description: '',
+            startDate: '',
+            endDate: '',
+        }))
+    }
+})
+
+export const useProjectEditStore = create(set => {
+    return {
+        project: null,
+        setProjectStore: (proj) => set({project: proj})
+    }
+})
