@@ -12,7 +12,7 @@ const hind = Hind({
 
 const navigation = [
     { name: 'INICIO', href: '/', current: true },
-    { name: 'NOVEDADES', href: '#', current: false },
+    { name: 'NOVEDADES', href: '/novedades', current: false },
     { name: 'PROYECTOS', href: '/proyectos', current: false },
     { name: 'INTEGRANTES', href: '/integrantes', current: false },
 ]
