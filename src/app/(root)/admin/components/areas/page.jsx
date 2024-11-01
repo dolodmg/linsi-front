@@ -5,6 +5,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button
 import { useForm, FormProvider } from "react-hook-form";
 import ModalMembers from './modalMembers';
 import ModalAddMembers from './add/modalAddMembers';
+import ModalAddArea from './add/modalAddArea';
 import AddButton from '../addButton';
 
 const inter = Inter(
@@ -17,6 +18,7 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
     const [isModalDetalleOpen, setIsModalDetalleOpen] = useState(false);
     const [selectedArea, setSelectedArea] = useState(null);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalAddAreaOpen, setIsModalAddAreaOpen] = useState(false);
     
     const handleMembersClick = (area) => {
         setIsModalDetalleOpen(true);   
@@ -38,32 +40,44 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
         setSelectedArea(null);
     }
 
+    const handleAddAreaClose = () => {
+        setIsModalAddAreaOpen(false);
+    }
+
+    const handleAddArea = () => {
+        setIsModalAddAreaOpen(true);
+    }
+
     return (
-        <FormProvider {...methods}>
-            <Table area-label="Lista de áreas">
-                <TableHeader>
-                    <TableColumn>NOMBRE</TableColumn>
-                    <TableColumn>INTEGRANTES</TableColumn>
-                    <TableColumn>ACCIONES</TableColumn>
-                </TableHeader>
-                <TableBody>
-                    {areas.map((area) => (
-                        <TableRow key={area.id}>
-                            <TableCell className={`${inter.className} text-black`}>{area.name}</TableCell>
-                            <TableCell className={`${inter.className} text-black`}>
-                                <Button className='bg-bg-blue text-white' size='md' aria-label='Ver integrantes' onClick={() => handleMembersClick(area)}>
-                                    Ver integrantes
-                                </Button>
-                            </TableCell>
-                            <TableCell className={`${inter.className} text-black`}>
-                                <AddButton component='integrantes' onClick={() => handleMembersAddClick(area)}/>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <ModalMembers isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} membersByArea={membersByArea} selectedArea={selectedArea} />
-            <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
-        </FormProvider>
+        <>
+            <AddButton onClick={handleAddArea} component='área' />
+            <FormProvider {...methods}>
+                <Table aria-label="Lista de áreas" className='mt-2'>
+                    <TableHeader>
+                        <TableColumn>NOMBRE</TableColumn>
+                        <TableColumn>INTEGRANTES</TableColumn>
+                        <TableColumn>ACCIONES</TableColumn>
+                    </TableHeader>
+                    <TableBody>
+                        {areas.map((area) => (
+                            <TableRow key={area.id}>
+                                <TableCell className={`${inter.className} text-black`}>{area.name}</TableCell>
+                                <TableCell className={`${inter.className} text-black`}>
+                                    <Button className='bg-bg-blue text-white' size='md' aria-label='Ver integrantes' onClick={() => handleMembersClick(area)}>
+                                        Ver integrantes
+                                    </Button>
+                                </TableCell>
+                                <TableCell className={`${inter.className} text-black`}>
+                                    <AddButton component='integrantes' onClick={() => handleMembersAddClick(area)}/>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                <ModalMembers isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} membersByArea={membersByArea} selectedArea={selectedArea} />
+                <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
+                <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} />
+            </FormProvider>
+        </>
     )
 }

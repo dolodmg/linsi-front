@@ -108,6 +108,7 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                             onClose={handleCloseModal}
                             onSubmit={addMemberToArea}
                             submitLabel="Agregar"
+                            className='flex justify-end gap-2 mt-4'
                         /> 
                         </ModalBody>
                     </> 

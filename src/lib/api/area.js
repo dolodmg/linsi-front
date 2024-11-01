@@ -10,7 +10,7 @@ export async function getAreaById(id) { //Obtiene un área por id
 }
 
 export async function createArea(formData) { //Crea un área
-    return await apiRequest('/area','POST', formData, 'multipart/form-data', true);
+    return await apiRequest(`/area`,'POST', formData, 'application/json', true);
 }
 
 export async function editArea(formData, id) { //Edita un área

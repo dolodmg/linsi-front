@@ -108,6 +108,7 @@ const ModalAgregar = ({ isOpen, onClose }) => {
                             onClose={onClose}
                             onSubmit={addMember}
                             submitLabel="Agregar integrante"
+                            className='flex justify-end gap-2 mt-4'
                         />
                     </div>
                 )}

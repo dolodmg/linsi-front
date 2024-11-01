@@ -7,9 +7,9 @@ const inter = Inter({
     weights: ['400', '500', '600', '700']
 });
 
-const ButtonsAction = ({ isLoading, onClose, onSubmit, submitLabel = 'Guardar' }) => {
+const ButtonsAction = ({ isLoading, onClose, onSubmit, submitLabel = 'Guardar', className }) => {
     return (
-        <div className='flex justify-end gap-2 mt-4'>
+        <div className={className}>
             <Button 
                 type='button' 
                 className={`${inter.className} bg-red-700 text-white`} 
