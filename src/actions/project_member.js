@@ -11,8 +11,8 @@ export async function getMembersByProjectAction(projectId) {
     return data
 }
 
-export async function addMemberToProjectAction(formData, memberId, projectId) {
-    const { data, headers } = await addMemberToProject(formData, memberId, projectId)
+export async function addMemberToProjectAction(memberId, projectId) {
+    const { data, headers } = await addMemberToProject(memberId, projectId)
     return data
 }
 

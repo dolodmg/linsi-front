@@ -1,18 +1,41 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SelectMembers from './selectMembers';
 
 const inter = Inter(
     { subsets: ['latin'] },
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalDetalle = ({ isOpen, onClose, selectedProject, membersByProject, areasByProject }) => {
+const ModalDetalle = ({ isOpen, onClose, selectedProject, membersByProject, areasByProject, members }) => {
+
+    const [isAddAreaOpen, setIsAddAreaOpen] = useState(false);    
+    const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+    const [selectedMembers, setSelectedMembers] = useState([]);
 
     if (!selectedProject) return null;
     const projectMembers = membersByProject[selectedProject.id] || [];
     const projectAreas = areasByProject[selectedProject.id] || [];
+
+    const availableMembers = members.filter(member => 
+        !projectMembers.some(projectMember => projectMember.id === member.id)
+    );
+
+    const handleSelectionChange = (selected) => {
+        setSelectedMembers(selected);
+    };
+       
+
+    const handleOpenAddArea = () => {
+        setIsAddAreaOpen(true);
+    }
+
+    const handleOpenAddMember = () => { 
+        setIsAddMemberOpen(true);
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size='2xl'>

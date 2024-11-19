@@ -7,7 +7,9 @@ import { useMemberEditStore } from "@/app/store";
 import EditIcon from '@mui/icons-material/Edit';
 import ModalEditar from './edit/modalEditar'; 
 import AddButton from '../addButton';
+import DeleteButton from '../deleteButton';
 import ModalAgregar from './add/modalAgregar';
+import ModalDeleteMember from './delete/modalDeleteMember';
 
 const inter = Inter({ subsets: ['latin'] },
  { weights: ['400, 500, 600, 700'] }
@@ -16,6 +18,8 @@ const inter = Inter({ subsets: ['latin'] },
 export const TableIntegrantes = ({ members }) => {
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
   const { setMemberStore } = useMemberEditStore();
   const methods = useForm();
 
@@ -36,6 +40,16 @@ export const TableIntegrantes = ({ members }) => {
   const handleAddClose = () => {
     setIsModalAddOpen(false);
   }
+
+  const handleDeleteModal = (memberItem) => {
+    setIsModalDeleteOpen(true);
+    setSelectedMember(memberItem);
+}
+
+const handleCloseDelete = () => {
+    setIsModalDeleteOpen(false);
+    setSelectedMember(null);
+}
   
   return (
     <>
@@ -60,16 +74,18 @@ export const TableIntegrantes = ({ members }) => {
               <TableCell>
                 <img src={memberItem.s3Url} 
                 alt={`${memberItem.firstName} ${memberItem.lastName}`} 
-                className='rounded-full w-[100px] h-[100px]'/>
+                className='rounded-full overflow-hidden object-cover w-[100px] h-[100px]'/>
               </TableCell>
               <TableCell>
-                <Button
+                <div className='flex gap-1'>
+                <button
                   onClick={() => handleEditClick(memberItem)}
-                  className='bg-bg-blue'
-                  size='sm'
+                  className='p-1 bg-white text-bg-blue'
                 >
-                  <EditIcon className='text-white' />
-                </Button>
+                  <EditIcon fontSize='medium' />
+                </button>
+                <DeleteButton onClick={() => handleDeleteModal(memberItem)} />
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -77,6 +93,7 @@ export const TableIntegrantes = ({ members }) => {
       </Table>
       <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
       <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
+      <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} />
     </FormProvider>
     </>
   );

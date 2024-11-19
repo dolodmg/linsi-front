@@ -31,7 +31,7 @@ export const MemberContainer = ({ members, areasByMember }) => {
                                 <img
                                     className='object-cover w-full h-full rounded-full'
                                     alt="Imagen del integrante"
-                                    src={member.s3Url || '/default-avatar.png'}
+                                    src={member.s3Url || '/default-avatar.png'} //TODO: Crear imagen por defecto (actualmente no hay ninguna)
                                 />
                             </div>
                             <div className="flex flex-col">
@@ -39,9 +39,15 @@ export const MemberContainer = ({ members, areasByMember }) => {
                                     {member.firstName} {member.lastName}
                                 </p>
                                 {areasByMember && areasByMember[member.id] ? (
+                                    areasByMember[member.id].length > 0 ? (
                                     <p className={`${inter.className} text-small text-default-500`}>
                                         Área de {areasByMember[member.id].map(area => area.name).join(', Área de ')}
                                     </p>
+                                    ) : (
+                                    <p className={`${inter.className} text-small text-default-500`}>
+                                        No está asignado/a a ningún área
+                                    </p>
+                                    )
                                 ) : (
                                     <p className={`${inter.className} text-small text-default-500`}>
                                         Áreas no disponibles

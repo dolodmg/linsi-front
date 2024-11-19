@@ -1,26 +1,31 @@
 "use client"
-import React, { useEffect, useState } from "react"
-import { Select, SelectItem, Autocomplete, AutocompleteItem, AutocompleteSection } from '@nextui-org/react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { getMembersAction } from "@/actions/member";
-import { useFormStoreProject } from "@/app/store";
+import React, { useEffect, useState } from 'react';
+import { Select, SelectItem } from '@nextui-org/react';
 
-const SelectMembers = ({ name, labelMembers, placeholder, defaultValue }) => {
-    const { formState: { errors }, control } = useFormContext();
-    const { setMemberId } = useFormStoreProject();
-    const [members, setMembers] = useState([]);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchMembers = async () => {
-          try {
-            const membersData = await getMembersAction();
-            setMembers(membersData || []);
-          } catch (error) {
-            console.error("Error fetching members:", error);
-            setError('Error al cargar los miembros');
-          }
-        };
-        fetchMembers();
-      }, []);
+const SelectMembers = ({ selectedMembers, availableMembers, handleSelectionChange  }) => {
+    return (
+        <Select
+            label='Integrantes'
+            placeholder='Seleccioná los integrantes'
+            selectionMode='multiple'
+            selectedKeys={selectedMembers}
+            onSelectionChange={handleSelectionChange}
+            value={selectedMembers}
+            aria-label='Seleccionar integrantes'
+            className='text-black'>
+            {availableMembers.map((member) => (
+                <SelectItem 
+                    key={member.id} 
+                    value={member.id.toString()}
+                    textValue={`${member.firstName} ${member.lastName}`} 
+                    className='text-black'
+                    aria-label='Integrante(s) seleccionado(s)'
+                >
+                    {member.firstName} {member.lastName}
+                </SelectItem>
+            ))}
+        </Select>
+    )
 }
+
+export default SelectMembers;
