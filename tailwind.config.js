@@ -1,13 +1,17 @@
-const {nextui} = require('@nextui-org/theme');
+import plugin from 'tailwindcss/plugin'; 
+
+const {nextui} = require("@nextui-org/react");
 const plugin = require('tailwindcss/plugin')
 const { fontFamily } = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    // ...
+    // make sure it's pointing to the ROOT node_module
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+  "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -36,5 +40,12 @@ module.exports = {
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [nextui(
+    {
+      addCommonColor: true,
+      defaultTheme: "light",
+    }
+  )],
 };
+
+

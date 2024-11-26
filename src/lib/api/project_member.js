@@ -9,8 +9,12 @@ export async function getMembersByProject(projectId) { // Obtiene los miembros d
     return await apiRequest(`/projectxmember/project/${projectId}/members`, 'GET', null, 'application/json', false);
 }
 
-export async function addMemberToProject(formData, memberId, projectId) { // Añade un miembro a un proyecto
-    return await apiRequest(`/projectxmember/project/${projectId}/member/${memberId}`, 'POST', formData, 'multiform/form-area', true);
+export async function addMemberToProject(memberId, projectId) { // Añade un miembro a un proyecto
+    const data = {
+        member_id: memberId,
+        project_id: projectId
+    }
+    return await apiRequest(`/projectxmember`, 'POST', data, 'application/json', true);
 }
 
 export async function removeMemberFromProject(memberId, projectId) { // Elimina un miembro de un proyecto

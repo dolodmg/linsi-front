@@ -1,13 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalContent } from '@nextui-org/react';
-
 import ButtonsAction from '../../buttonsAction';
 import { createAreaAction } from '@/actions/area';
 import { useRouter } from 'next/navigation';
 import NameInput from './nameInput';
-
-
 
 const ModalAddArea = ({ isOpen, onClose }) => {
 

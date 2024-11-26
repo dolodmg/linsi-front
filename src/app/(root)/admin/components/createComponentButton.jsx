@@ -9,16 +9,16 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const CreateMemberButton = ({ onClick }) => {
+const CreateComponentButton = ({ onClick, component }) => {
     return (
         <Button
             className={`${inter.className} bg-light-blue text-white gap-1`}
             onClick={onClick}
         >
             <AddBoxIcon />
-            Crear integrante
+            Crear {component}
         </Button>
     );
 }
 
-export default CreateMemberButton;
+export default CreateComponentButton;

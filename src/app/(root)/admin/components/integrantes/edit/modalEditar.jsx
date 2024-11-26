@@ -92,7 +92,11 @@ const ModalEditar = ({ isOpen, onClose }) => {
                                     </div>
                                     {error && <p className="text-red-500">{error}</p>}
                                 </div>
-                                <ButtonsAction isLoading={editing} onClose={onClose} submitLabel="Guardar cambios"/>
+                                <ButtonsAction 
+                                isLoading={editing} 
+                                onClose={onClose} 
+                                submitLabel="Guardar cambios" 
+                                className='flex justify-end gap-2 mt-4'/>
                             </form>
                         </FormProvider>
                     </div>    

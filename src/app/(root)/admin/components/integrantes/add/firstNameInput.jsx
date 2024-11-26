@@ -5,6 +5,7 @@ import { Input } from '@nextui-org/react';
 const FirstNameInput = ({onChange}) => {
     return (
         <Input
+          isRequired
           label="Nombre"
           id="firstName"
           placeholder="Juan"

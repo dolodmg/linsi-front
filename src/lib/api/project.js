@@ -16,3 +16,7 @@ export async function createProject(formData) { //Crea un proyecto
 export async function editProject(id, data) { //Edita un proyecto
     return await apiRequest(`/project/${id}`, 'PUT', data,'multipart/form-data', true)
 }
+
+export async function deleteProject(id) { //Elimina un proyecto
+    return await apiRequest(`/project/${id}`, 'DELETE', null, 'application/json', true)
+}

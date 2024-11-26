@@ -3,59 +3,59 @@ import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider, Select, SelectItem } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
 import ButtonsAction from '../../buttonsAction';
-import { addMemberToAreaAction } from '@/actions/area_member';
+import { addAreaToProjectAction } from '@/actions/project_area';
 import { useRouter } from 'next/navigation';
 import CreateComponentButton from '../../createComponentButton';
-import ModalAgregar from '../../integrantes/add/modalAgregar';
+import ModalAddArea from '../../areas/add/modalAddArea';
 
 const inter = Inter(
     { subsets: ['latin'] },
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members }) => {
+const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas }) => {
 
-    const [selectedMembers, setSelectedMembers] = useState([]);
+    const [selectedAreas, setSelectedAreas] = useState([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [adding, setAdding] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
 
-    if (!selectedArea) return null;
-    const areaMembers = membersByArea[selectedArea.id] || [];
+    if (!selectedProject) return null;
+    const projectAreas = areasByProject[selectedProject.id] || [];
 
-    const availableMembers = members.filter(member => 
-        !areaMembers.some(areaMember => areaMember.id === member.id)
+    const availableAreas = areas.filter(area => 
+        !projectAreas.some(projectAreas => projectAreas.id === area.id)
     );
 
     const handleSelectionChange = (selected) => {
-        setSelectedMembers(selected);
+        setSelectedAreas(selected);
     };
 
-    const addMemberToArea = async () => {
+    const addAreaToProject = async () => {
         setAdding(true);
         try {
             await Promise.all(
-                Array.from(selectedMembers).map(async (memberId) => {
-                    await addMemberToAreaAction(memberId, selectedArea.id);
+                Array.from(selectedAreas).map(async (areaId) => {
+                    await addAreaToProjectAction(areaId, selectedProject.id);
                 })
             );
             router.refresh();
             onClose();
         } catch (error) {
-            console.error('Error al agregar miembros al área', error);
+            console.error('Error al agregar áreas al proyecto', error);
         } finally {
-            setSelectedMembers([]);
+            setSelectedAreas([]);
             setAdding(false);
         }
     };
 
     const handleCloseModal = () => {
-        setSelectedMembers([]);
+        setSelectedAreas([]);
         onClose();
     }
 
-    const handleOpenAddMemberModal = () => {
+    const handleOpenAddAreaModal = () => {
         setIsModalAddOpen(true);
     }
 
@@ -71,42 +71,42 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                 {(onClose) => (
                     <>
                         <ModalHeader className={`${inter.className} text-bg-blue text-xl`}>
-                            Área: {selectedArea.name}
+                            Proyecto: {selectedProject.name}
                         </ModalHeader>
                         <Divider/>
                         <ModalBody>
                             <div className='flex flex-col py-2'>
-                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná uno o más integrantes para agregar al área de {selectedArea.name}:</p>
+                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná una o más áreas para agregar al proyecto {selectedProject.name}:</p>
                                 <Select
-                                label='Integrantes'
-                                placeholder='Seleccioná los integrantes'
+                                label='Áreas'
+                                placeholder='Seleccioná una o más áreas'
                                 selectionMode='multiple'
-                                selectedKeys={selectedMembers}
+                                selectedKeys={selectedAreas}
                                 onSelectionChange={handleSelectionChange}
-                                value={selectedMembers}
-                                aria-label='Seleccionar integrantes'
+                                value={selectedAreas}
+                                aria-label='Seleccionar áreas'
                                 className='text-black'>
-                                    {availableMembers.map((member) => (
+                                    {availableAreas.map((area) => (
                                         <SelectItem 
-                                        key={member.id} 
-                                        value={member.id.toString()}
-                                        textValue={`${member.firstName} ${member.lastName}`} 
+                                        key={area.id} 
+                                        value={area.id.toString()}
+                                        textValue={`${area.name}`} 
                                         className='text-black'
-                                        aria-label='Integrante(s) seleccionado(s)'
+                                        aria-label='Área(s) seleccionada(s)'
                                         >
-                                            {member.firstName} {member.lastName}
+                                            {area.name}
                                         </SelectItem>
                                     ))}
                                 </Select>
                             </div>
                             <div>
-                                <CreateComponentButton onClick={handleOpenAddMemberModal} component="integrante" />
+                                <CreateComponentButton onClick={handleOpenAddAreaModal} component="área" />
                             </div>
                             
                             <ButtonsAction
                             isLoading={adding}
                             onClose={handleCloseModal}
-                            onSubmit={addMemberToArea}
+                            onSubmit={addAreaToProject}
                             submitLabel="Agregar"
                             className='flex justify-end gap-2 mt-4'
                         /> 
@@ -115,9 +115,9 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                 )}
             </ModalContent>
         </Modal>
-        <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
+        <ModalAddArea isOpen={isModalAddOpen} onClose={handleAddClose} />
         </>
     )
 }
 
-export default ModalAddMembers;
+export default ModalAddAreas;

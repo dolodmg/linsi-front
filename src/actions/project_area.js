@@ -11,8 +11,8 @@ export async function getAreasByProjectAction(projectId) { // Obtiene las las á
     return data
 }
 
-export async function addAreaToProjectAction(formData, areaId, projectId) { // Añade un área a un proyecto
-    const { data, headers } = await addAreaToProject(formData, areaId, projectId)
+export async function addAreaToProjectAction(areaId, projectId) { // Añade un área a un proyecto
+    const { data, headers } = await addAreaToProject(areaId, projectId)
     return data
 }
 

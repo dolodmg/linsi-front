@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider, Select, SelectItem } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
 import ButtonsAction from '../../buttonsAction';
-import { addMemberToAreaAction } from '@/actions/area_member';
+import { addMemberToProjectAction } from '@/actions/project_member';
 import { useRouter } from 'next/navigation';
 import CreateComponentButton from '../../createComponentButton';
 import ModalAgregar from '../../integrantes/add/modalAgregar';
@@ -13,7 +13,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members }) => {
+const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, members }) => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -21,29 +21,29 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
     const [adding, setAdding] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
 
-    if (!selectedArea) return null;
-    const areaMembers = membersByArea[selectedArea.id] || [];
+    if (!selectedProject) return null;
+    const projectMembers = membersByProject[selectedProject.id] || [];
 
     const availableMembers = members.filter(member => 
-        !areaMembers.some(areaMember => areaMember.id === member.id)
+        !projectMembers.some(projectMember => projectMember.id === member.id)
     );
 
     const handleSelectionChange = (selected) => {
         setSelectedMembers(selected);
     };
 
-    const addMemberToArea = async () => {
+    const addMemberToProject = async () => {
         setAdding(true);
         try {
             await Promise.all(
                 Array.from(selectedMembers).map(async (memberId) => {
-                    await addMemberToAreaAction(memberId, selectedArea.id);
+                    await addMemberToProjectAction(memberId, selectedProject.id);
                 })
             );
             router.refresh();
             onClose();
         } catch (error) {
-            console.error('Error al agregar miembros al área', error);
+            console.error('Error al agregar miembros al proyecto', error);
         } finally {
             setSelectedMembers([]);
             setAdding(false);
@@ -71,12 +71,12 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                 {(onClose) => (
                     <>
                         <ModalHeader className={`${inter.className} text-bg-blue text-xl`}>
-                            Área: {selectedArea.name}
+                            Proyecto: {selectedProject.name}
                         </ModalHeader>
                         <Divider/>
                         <ModalBody>
                             <div className='flex flex-col py-2'>
-                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná uno o más integrantes para agregar al área de {selectedArea.name}:</p>
+                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná uno o más integrantes para agregar al proyecto {selectedProject.name}:</p>
                                 <Select
                                 label='Integrantes'
                                 placeholder='Seleccioná los integrantes'
@@ -106,7 +106,7 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                             <ButtonsAction
                             isLoading={adding}
                             onClose={handleCloseModal}
-                            onSubmit={addMemberToArea}
+                            onSubmit={addMemberToProject}
                             submitLabel="Agregar"
                             className='flex justify-end gap-2 mt-4'
                         /> 

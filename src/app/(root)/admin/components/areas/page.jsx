@@ -6,7 +6,11 @@ import { useForm, FormProvider } from "react-hook-form";
 import ModalMembers from './modalMembers';
 import ModalAddMembers from './add/modalAddMembers';
 import ModalAddArea from './add/modalAddArea';
+import ModalDeleteArea from './delete/modalDeleteArea';
 import AddButton from '../addButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const inter = Inter(
     { subsets: ['latin'] },
@@ -19,6 +23,8 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
     const [selectedArea, setSelectedArea] = useState(null);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
     const [isModalAddAreaOpen, setIsModalAddAreaOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [areaToDelete, setAreaToDelete] = useState(null);
     
     const handleMembersClick = (area) => {
         setIsModalDetalleOpen(true);   
@@ -48,6 +54,16 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
         setIsModalAddAreaOpen(true);
     }
 
+    const handleDeleteArea = (area) => {
+        setSelectedArea(area);
+        setIsModalDeleteOpen(true);
+    }
+
+    const handleCloseDelete = () => {
+        setIsModalDeleteOpen(false);
+        setSelectedArea(null);
+    }
+
     return (
         <>
             <AddButton onClick={handleAddArea} component='área' />
@@ -63,12 +79,19 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
                             <TableRow key={area.id}>
                                 <TableCell className={`${inter.className} text-black`}>{area.name}</TableCell>
                                 <TableCell className={`${inter.className} text-black`}>
-                                    <Button className='bg-bg-blue text-white' size='md' aria-label='Ver integrantes' onClick={() => handleMembersClick(area)}>
-                                        Ver integrantes
-                                    </Button>
+                                    <div className='flex gap-2'>
+                                    <button className='bg-white p-1 text-bg-blue' aria-label='Ver integrantes' onClick={() => handleMembersClick(area)}>
+                                        <VisibilityIcon/> Ver
+                                    </button>
+                                    <button className='bg-white p-1 text-green-700' aria-label='Agregar integrantes' onClick={() => handleMembersAddClick(area)}>
+                                        <AddCircleIcon/> Agregar
+                                    </button>
+                                    </div>
                                 </TableCell>
-                                <TableCell className={`${inter.className} text-black`}>
-                                    <AddButton component='integrantes' onClick={() => handleMembersAddClick(area)}/>
+                                <TableCell className={`${inter.className}`}>
+                                    <button className='bg-white p-1 text-red-700' aria-label='Eliminar área' onClick={() => handleDeleteArea(area)}>
+                                        <DeleteIcon/> Eliminar área
+                                    </button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -77,6 +100,7 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
                 <ModalMembers isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} membersByArea={membersByArea} selectedArea={selectedArea} />
                 <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
                 <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} />
+                <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedArea={selectedArea} />
             </FormProvider>
         </>
     )

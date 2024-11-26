@@ -19,7 +19,7 @@ export const TabsComponent = ({ members, projects, areas, membersByProject, area
                     <TableIntegrantes members={members}/>
                 </Tab>
                 <Tab key="proyectos" title="Proyectos">
-                    <TableProyectos projects={projects} membersByProject={membersByProject} areasByProject={areasByProject}/>
+                    <TableProyectos projects={projects} membersByProject={membersByProject} areasByProject={areasByProject} members={members} areas={areas}/>
                 </Tab>
                 <Tab key="novedades" title="Novedades">
                 <Card>

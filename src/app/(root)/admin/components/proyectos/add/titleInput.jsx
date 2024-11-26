@@ -2,18 +2,18 @@
 import React from 'react';
 import { Input } from '@nextui-org/react';
 
-const NameInput = ({onChange}) => {
+const TitleInput = ({onChange}) => {
     
     return (
         <Input
         isRequired
-        label="Nombre del área"
+        label="Nombre del proyecto"
         id="name"
-        placeholder="Ingrese el nombre del área"
+        placeholder="Ingrese el nombre del proyecto"
         className='text-black'
         onChange={onChange}
         />
     );
 }
 
-export default NameInput;
+export default TitleInput;

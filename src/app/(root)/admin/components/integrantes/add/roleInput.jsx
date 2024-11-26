@@ -28,6 +28,7 @@ const RoleInput = ({ onChange }) => {
     return (
         <div className='w-full'>
           <Select
+            isRequired
             placeholder="Seleccionar rol"
             label="Rol"
             className='w-1/2 text-black'

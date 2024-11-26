@@ -1,9 +1,9 @@
 "use client"
 import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 
-const Title = ({ name, labelTitle, defaultValue }) => {
+const Description = ({ name, labelDescription, defaultValue }) => {
     const { control, formState: { errors } } = useFormContext();
     
     return (
@@ -12,9 +12,10 @@ const Title = ({ name, labelTitle, defaultValue }) => {
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => (
-            <Input
+            <Textarea
             {...field}
-            label={labelTitle}
+            isRequired
+            label={labelDescription}
             id={name}
             placeholder={defaultValue}
             isInvalid={!!errors[name]}
@@ -25,4 +26,4 @@ const Title = ({ name, labelTitle, defaultValue }) => {
     );
 }
 
-export default Title;
+export default Description;
