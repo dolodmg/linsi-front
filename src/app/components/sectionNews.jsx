@@ -1,13 +1,9 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Header } from '../../components/header';
-import { NovedadList } from './components/novedadList';
-import { Divider } from '@nextui-org/react';
-import { LinkInicio } from '@/app/components/linkInicio';
+import { NovedadList } from '../(root)/novedades/components/novedadList';
 import { getAllNewsAction } from '@/actions/news';
 
-
-const Novedades = () => {
+const SectionNews = () => {
   const [novedades, setNovedades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,17 +27,10 @@ const Novedades = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="flex flex-col bg-bg-light-grey">
-      <Header headerName="NOVEDADES" />
-      <div className="mx-8 mb-4">
-        <LinkInicio />
-        <Divider />
-        <div className="flex flex-row justify-start items-center space-x-4 overflow-x-auto w-full py-4">
-          <NovedadList novedades={novedades} />
-        </div>
-      </div>
-    </div>
-  )
+    <section className="bg-white text-white py-16 px-8">
+      <NovedadList novedades={novedades} />
+    </section>
+  );
 };
 
-export default Novedades;
+export default SectionNews;

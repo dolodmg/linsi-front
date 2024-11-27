@@ -1,5 +1,8 @@
-const {nextui} = require("@nextui-org/react");
 import plugin from 'tailwindcss/plugin'; 
+
+const {nextui} = require("@nextui-org/react");
+const plugin = require('tailwindcss/plugin')
+const { fontFamily } = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -27,7 +30,13 @@ module.exports = {
         'bg-blue': '#1A3A68',
         'bg-light-grey': '#F0F0F0',
         'card-grey': '#D9D9D9',
-        'light-blue': '#66A3BD'
+        'light-blue': '#66A3BD',
+        'dark-blue': '#1C2956',
+        'project-background': '#E3F2FD',
+        'section-blue': '#1565C0',
+      },
+      fontFamily: {
+        calistoga: ['Calistoga', ...fontFamily.serif],
       },
     },
   },

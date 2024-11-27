@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-800 text-white py-10 mt-10 min-h-[150px]">
+        <footer className="bg-gray-800 text-white py-10 mt-0">
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
                 <div className="text-center md:text-left mb-4 md:mb-0">
                     <p>&copy; {new Date().getFullYear()} Linsi. Todos los derechos reservados.</p>
@@ -22,3 +22,5 @@ const Footer = () => {
 }
 
 export default Footer;
+
+
