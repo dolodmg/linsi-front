@@ -12,7 +12,7 @@ const inter = Inter(
 )
 
 
-const ModalDeleteMember = ({ isOpen, onClose, selectedMember }) => {
+const ModalDeleteMember = ({ isOpen, onClose, selectedMember, onDeleteSuccess }) => {
 
     const router = useRouter();
     const [deleting, setDeleting] = useState(false);
@@ -25,6 +25,7 @@ const ModalDeleteMember = ({ isOpen, onClose, selectedMember }) => {
 
         try {
             await deleteMemberAction(selectedMember.id);
+            onDeleteSuccess(selectedMember.id);
             onClose();
             router.refresh();
         } catch (error) {

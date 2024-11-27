@@ -10,7 +10,7 @@ import RoleInput from './roleInput';
 import ImageInput from './imageInput';
 import ButtonsAction from '../../buttonsAction';
 
-const ModalAgregar = ({ isOpen, onClose }) => {
+const ModalAgregar = ({ isOpen, onClose, onAddSuccess }) => {
     const router = useRouter();
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({}); 
@@ -59,9 +59,9 @@ const ModalAgregar = ({ isOpen, onClose }) => {
         }
 
         try {
-            await createMemberAction(formData);
+            const newMember = await createMemberAction(formData);
+            onAddSuccess(newMember);
             onClose();
-            router.refresh();
             setErrors({});
         } catch (error) {
             console.error('Error al añadir el miembro:', error);

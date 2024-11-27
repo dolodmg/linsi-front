@@ -6,7 +6,7 @@ import { createAreaAction } from '@/actions/area';
 import { useRouter } from 'next/navigation';
 import NameInput from './nameInput';
 
-const ModalAddArea = ({ isOpen, onClose }) => {
+const ModalAddArea = ({ isOpen, onClose, onAddSuccess }) => {
 
     const router = useRouter();
     const [adding, setAdding] = useState(false);
@@ -30,9 +30,9 @@ const ModalAddArea = ({ isOpen, onClose }) => {
         }
 
         try {
-            await createAreaAction(data);
+            const newArea = await createAreaAction(data);
+            onAddSuccess(newArea)
             onClose();
-            router.refresh();
             setErrors({});
         } catch (error) {
             console.log(error);
@@ -41,6 +41,7 @@ const ModalAddArea = ({ isOpen, onClose }) => {
             setAdding(false);
         }
     }
+
 
     return (
         <>

@@ -4,35 +4,20 @@ import { createNews, getNews, deleteNews, getAllNews, editNews } from "@/lib/api
 
 // Obtiene una noticia por ID
 export async function getNewsAction(id) {
-    try {
-        const { data } = await getNews(id);
-        return data;
-    } catch (error) {
-        console.error('Error in getNewsAction:', error);
-        throw error;
-    }
+    const {data, headers} = await getNews(id)
+    return data
 }
 
 // Elimina una noticia por ID
 export async function deleteNewsAction(id) {
-    try {
-        const { data } = await deleteNews(id);
-        return data;
-    } catch (error) {
-        console.error('Error in deleteNewsAction:', error);
-        throw error;
-    }
+    const {data, headers} = await deleteNews(id)
+    return data
 }
 
 // Crea una noticia
 export async function createNewsAction(formData) {
-    try {
-        const { data } = await createNews(formData);
-        return data;
-    } catch (error) {
-        console.error('Error in createNewsAction:', error);
-        throw error;
-    }
+    const {data, headers } = await createNews(formData);
+    return data; 
 }
 
 // Obtiene todas las noticias
@@ -48,11 +33,6 @@ export async function getAllNewsAction() {
 
 // Edita una noticia por ID
 export async function editNewsAction(id, formData) {
-    try {
-        const { data } = await editNews(id, formData);
-        return data;
-    } catch (error) {
-        console.error('Error in editNewsAction:', error);
-        throw error;
-    }
+    const { data, headers } = await editNews(id, formData);
+    return data;
 }

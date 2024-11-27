@@ -19,6 +19,7 @@ const inter = Inter(
 
 export const TableAreas = ({ areas, membersByArea, members }) => {
     const methods = useForm();
+    const [localAreas, setLocalAreas] = useState(areas);
     const [isModalDetalleOpen, setIsModalDetalleOpen] = useState(false);
     const [selectedArea, setSelectedArea] = useState(null);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
@@ -64,6 +65,14 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
         setSelectedArea(null);
     }
 
+    const handleAddAreaSuccess = (newArea) => {
+        setLocalAreas((prevAreas) => [newArea, ...prevAreas]);
+    };    
+
+    const handleDeleteAreaSuccess = (deletedAreaId) => {
+        setLocalAreas((prevAreas) => prevAreas.filter((area) => area.id !== deletedAreaId));
+    };
+    
     return (
         <>
             <AddButton onClick={handleAddArea} component='área' />
@@ -75,7 +84,7 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
                         <TableColumn>ACCIONES</TableColumn>
                     </TableHeader>
                     <TableBody>
-                        {areas.map((area) => (
+                        {localAreas.map((area) => (
                             <TableRow key={area.id}>
                                 <TableCell className={`${inter.className} text-black`}>{area.name}</TableCell>
                                 <TableCell className={`${inter.className} text-black`}>
@@ -99,8 +108,8 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
                 </Table>
                 <ModalMembers isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} membersByArea={membersByArea} selectedArea={selectedArea} />
                 <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
-                <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} />
-                <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedArea={selectedArea} />
+                <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} onAddSuccess={handleAddAreaSuccess}/>
+                <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedArea={selectedArea} onDeleteSuccess={handleDeleteAreaSuccess} />
             </FormProvider>
         </>
     )

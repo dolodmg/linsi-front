@@ -1,12 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { useFormStoreMember } from '@/app/store';
+import { useFormStoreNews } from '@/app/store';
 import { Button } from '@nextui-org/react';
 
-const ImageInput = ({ name, defaultValue }) => {
+const Image = ({ name, defaultValue }) => {
     const { control, setValue } = useFormContext();
-    const { setFileImage, setImage } = useFormStoreMember();
+    const { setFileImage, setImage } = useFormStoreNews();
     const [imageName, setImageName] = useState('');
     const [previewImage, setPreviewImage] = useState(defaultValue);
 
@@ -71,4 +71,4 @@ const ImageInput = ({ name, defaultValue }) => {
     );
 };
 
-export default ImageInput;
+export default Image;

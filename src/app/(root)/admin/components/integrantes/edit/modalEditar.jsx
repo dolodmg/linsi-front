@@ -15,7 +15,7 @@ import ButtonsAction from '../../buttonsAction';
 const ModalEditar = ({ isOpen, onClose }) => {
     const { member } = useMemberEditStore();
     const { 
-        firstName, lastName, email, roleId, image,
+        firstName, lastName, email, image,
         setFirstName, setLastName, setEmail, setRoleId, setImage
     } = useFormStoreMember();
     const router = useRouter();
@@ -79,7 +79,7 @@ const ModalEditar = ({ isOpen, onClose }) => {
                         <FormProvider {...methods}>
                             <form onSubmit={methods.handleSubmit(onEdit)}>
                                 <div className='flex flex-col md:flex-row gap-6'>
-                                <div className='w-full md:w-1/3'>
+                                    <div className='w-full md:w-1/3'>
                                         <ImageInput name="image" defaultValue={image} />
                                     </div>
                                     <div className='w-full md:w-2/3 flex flex-col gap-4'>

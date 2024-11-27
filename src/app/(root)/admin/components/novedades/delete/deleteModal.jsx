@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Modal, ModalContent, ModalHeader, ModalBody, Divider } from '@nextui-org/react';
 import ButtonsAction from '../../buttonsAction';
-import { deleteProjectAction } from '@/actions/project';
+import { deleteNewsAction } from '@/actions/news';
 import { Inter } from 'next/font/google';
 
 const inter = Inter(
@@ -12,7 +12,7 @@ const inter = Inter(
 )
 
 
-const ModalDeleteProject = ({ isOpen, onClose, selectedProject, onDeleteSuccess }) => {
+const ModalDeleteNew = ({ isOpen, onClose, selectedNew, onDeleteSuccess }) => {
 
     const router = useRouter();
     const [deleting, setDeleting] = useState(false);
@@ -24,12 +24,12 @@ const ModalDeleteProject = ({ isOpen, onClose, selectedProject, onDeleteSuccess 
         setError(null);
 
         try {
-            await deleteProjectAction(selectedProject.id);
-            onDeleteSuccess(selectedProject.id);
+            await deleteNewsAction(selectedNew.id);
+            onDeleteSuccess(selectedNew.id);
             onClose();
         } catch (error) {
-            setError(`Error al eliminar el proyecto: ${error.message}`);
-            console.error('Error al eliminar el proyecto:', error);
+            setError(`Error al eliminar el artículo: ${error.message}`);
+            console.error('Error al eliminar el artículo:', error);
         } finally {
             setDeleting(false);
         }
@@ -45,12 +45,12 @@ const ModalDeleteProject = ({ isOpen, onClose, selectedProject, onDeleteSuccess 
             <ModalContent>
                 {(onClose) => (
                     <>
-                    <ModalHeader className={`${inter.className} text-bg-blue text-xl`}>Proyecto: {selectedProject.name}</ModalHeader>
+                    <ModalHeader className={`${inter.className} text-bg-blue text-xl`}>Artículo: {selectedNew.title}</ModalHeader>
                     <Divider/>
                     <ModalBody>
                     <div className='bg-white flex flex-col gap-1'>
-                        <p className={`${inter.className} text-black text-md font-medium items-center justify-center`}>¿Está seguro que desea eliminar el proyecto "{selectedProject.name}"?</p>
-                        <p className={`${inter.className} text-black text-sm justify-start items-start`}>El proyecto se eliminará permanentemente. Esta acción es irreversible.</p>
+                        <p className={`${inter.className} text-black text-md font-medium items-center justify-center`}>¿Está seguro que desea eliminar el artículo "{selectedNew.title}"?</p>
+                        <p className={`${inter.className} text-black text-sm justify-start items-start`}>Este artículo se eliminará permanentemente. Esta acción es irreversible.</p>
                     </div>
                     <ButtonsAction
                             isLoading={deleting}
@@ -68,4 +68,4 @@ const ModalDeleteProject = ({ isOpen, onClose, selectedProject, onDeleteSuccess 
     )
 }
 
-export default ModalDeleteProject;
+export default ModalDeleteNew;

@@ -56,3 +56,28 @@ export const useProjectEditStore = create(set => {
         setProjectStore: (proj) => set({project: proj})
     }
 })
+
+export const useFormStoreNews = create(set => {
+    return {
+        title: '',
+        description: '',
+        image: '',
+        setTitle : (newTitle) => set({ title: newTitle }),
+        setDescription: (newDescription) => set({ description: newDescription }),
+        setFileImage: (newFileImage) => set({ fileImage: newFileImage }),
+        setImage: (newImage) => set({ image: newImage }),
+        resetForm: () => set(state => ({ 
+            title: '',
+            description: '',
+            image: '',
+        }))
+    }
+})
+
+
+export const useNewsEditStore = create(set => {
+    return {
+        news: null,
+        setNewsStore: (news) => set({news: news})
+    }
+})

@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalContent } from '@nextui-org/react';
 import ButtonsAction from '../../buttonsAction';
-import { createProjectAction } from '@/actions/project';
+import { createNewsAction } from '@/actions/news';
 import { useRouter } from 'next/navigation';
 import TitleInput from './titleInput'
 import DescriptionInput from './descriptionInput';
-import StartDateInput from './startDateInput';
-import EndDateInput from './endDateInput';
+import ImageInput from './imageInput';
 import { Inter } from 'next/font/google';
 
 const inter = Inter(
@@ -15,25 +14,24 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddProject = ({ isOpen, onClose, onAddSuccess }) => {
+const ModalAddNew = ({ isOpen, onClose, onAddSuccess }) => {
 
     const router = useRouter();
     const [adding, setAdding] = useState(false);
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
-    const [name, setName] = useState('');
+    const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
 
-    const addProject = async (event) => {
+    const addNew = async (event) => {
         event.preventDefault();
 
         let newErrors = {};
         const fields = {
-            name,
+            title,
             description,
-            startDate
+            selectedImage
         }
 
         Object.entries(fields).forEach(([key, value]) => {
@@ -51,20 +49,17 @@ const ModalAddProject = ({ isOpen, onClose, onAddSuccess }) => {
         }
 
         const formData = new FormData();
-        formData.append('name', name);
+        formData.append('title', title);
         formData.append('description', description);
-        formData.append('startDate', startDate);
-        if (endDate) {
-            formData.append('endDate', endDate);
-        }
+        formData.append('image', selectedImage);
         try {
-            const newProject = await createProjectAction(formData);
-            onAddSuccess(newProject);
+            const newNew = await createNewsAction(formData);
+            onAddSuccess(newNew);
             onClose();
             setErrors({});
         } catch (error) {
             console.log(error);
-            setError(`Error al crear proyecto: ${error.message}`);
+            setError(`Error al crear el artículo: ${error.message}`);
         } finally {
             setAdding(false);
         }
@@ -76,31 +71,27 @@ const ModalAddProject = ({ isOpen, onClose, onAddSuccess }) => {
                 <ModalContent>
                     {(onClose) => (
                         <div className='bg-white p-6'>
-                            <form onSubmit={addProject}>
-                                <div className='flex flex-col gap-4'>
-                                    <div className='w-2/3'>
-                                        <TitleInput onChange={(e) => { setName(e.target.value)}} />
-                                        {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name}</p>}
+                            <form onSubmit={addNew}>
+                            <div className='flex flex-col md:flex-row gap-6'>
+                                <div className='w-full md:w-1/3'>
+                                    <ImageInput onImageSelect={(file) => setSelectedImage(file)} />
+                                </div>
+                                <div className='flex flex-col gap-4 w-full md:w-2/3'>
+                                    <div className='w-full'>
+                                        <TitleInput onChange={(e) => { setTitle(e.target.value)}} />
+                                        {errors.title && <p className="text-red-500 text-sm mt-2">{errors.title}</p>}
                                     </div>
-                                    <div className='w-2/3'>
+                                    <div className='w-full'>
                                         <DescriptionInput onChange={(e) => { setDescription(e.target.value) }} />
                                         {errors.description && <p className="text-red-500 text-sm mt-2">{errors.description}</p>}
                                     </div>
-                                    <div className='flex flex-row gap-2 w-2/3'>
-                                        <div className='w-1/2'>
-                                            <StartDateInput onChange={(date) => { setStartDate(date) }} />
-                                            {errors.startDate && <p className="text-red-500 text-sm mt-2">{errors.startDate}</p>}
-                                         </div>
-                                        <div className='w-1/2'>
-                                            <EndDateInput onChange={(date) => { setEndDate(date) }} />
-                                        </div>   
-                                    </div>
-                                </div>                    
+                                </div>  
+                            </div>                  
                                 <ButtonsAction
                                 isLoading={adding}
                                 onClose={onClose}
-                                onSubmit={addProject}
-                                submitLabel="Agregar proyecto"
+                                onSubmit={addNew}
+                                submitLabel="Agregar novedad"
                                 className='flex justify-end gap-2 mt-4'
                                 />
                             </form>   
@@ -112,4 +103,4 @@ const ModalAddProject = ({ isOpen, onClose, onAddSuccess }) => {
     )
 }
 
-export default ModalAddProject;
+export default ModalAddNew;

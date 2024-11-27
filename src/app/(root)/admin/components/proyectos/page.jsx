@@ -30,6 +30,7 @@ export const TableProyectos = ({ projects, membersByProject, areasByProject, mem
     const [isModalAddMembersOpen, setIsModalAddMembersOpen] = useState(false);
     const [isModalAddAreasOpen, setIsModalAddAreasOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [localProjects, setLocalProjects] = useState(projects);
     const { setProjectStore } = useProjectEditStore();
 
     const handleCloseModalDetalle = () => {
@@ -89,6 +90,14 @@ export const TableProyectos = ({ projects, membersByProject, areasByProject, mem
         setSelectedProject(projectItem);
     }
 
+    const handleAddProjectSuccess = (newProject) => {
+        setLocalProjects((prevProjects) => [newProject, ...prevProjects]);
+    };    
+
+    const handleDeleteProjectSuccess = (deletedProjectId) => {
+        setLocalProjects((prevProjects) => prevProjects.filter((project) => project.id !== deletedProjectId));
+    };
+
     return (
         <>
         <AddButton onClick={handleAddProject} component='proyecto' />
@@ -104,7 +113,7 @@ export const TableProyectos = ({ projects, membersByProject, areasByProject, mem
                     <TableColumn>ACCIONES</TableColumn>
                 </TableHeader>
                 <TableBody>
-                    {projects.map((projectItem) => (
+                    {localProjects.map((projectItem) => (
                         <TableRow key={projectItem.id}>
                             <TableCell className={`${inter.className} text-black`}>{projectItem.name}</TableCell>
                             <TableCell className={`${inter.className} text-black`}>{projectItem.startDate}</TableCell>
@@ -146,8 +155,8 @@ export const TableProyectos = ({ projects, membersByProject, areasByProject, mem
             <ModalAddAreas isOpen={isModalAddAreasOpen} onClose={handleCloseAddAreas} selectedProject={selectedProject} areasByProject={areasByProject} areas={areas} />
             <ModalDetalle isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} selectedProject={selectedProject} membersByProject={membersByProject} areasByProject={areasByProject} members={members} />
             <ModalEditar isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
-            <ModalDeleteProject isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedProject={selectedProject} />
-            <ModalAddProject isOpen={isModalAddOpen} onClose={handleCloseAdd} />
+            <ModalDeleteProject isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedProject={selectedProject} onDeleteSuccess={handleDeleteProjectSuccess} />
+            <ModalAddProject isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddProjectSuccess} />
         </FormProvider>
         </>
     )

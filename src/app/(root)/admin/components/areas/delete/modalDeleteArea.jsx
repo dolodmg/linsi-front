@@ -12,7 +12,7 @@ const inter = Inter(
 )
 
 
-const ModalDeleteArea = ({ isOpen, onClose, selectedArea }) => {
+const ModalDeleteArea = ({ isOpen, onClose, selectedArea, onDeleteSuccess }) => {
 
     const router = useRouter();
     const [deleting, setDeleting] = useState(false);
@@ -25,8 +25,8 @@ const ModalDeleteArea = ({ isOpen, onClose, selectedArea }) => {
 
         try {
             await deleteAreaAction(selectedArea.id);
+            onDeleteSuccess(selectedArea.id);
             onClose();
-            router.refresh();
         } catch (error) {
             setError(`Error al eliminar el área: ${error.message}`);
             console.error('Error al eliminar el área:', error);

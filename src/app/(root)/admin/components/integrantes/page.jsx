@@ -20,6 +20,7 @@ export const TableIntegrantes = ({ members }) => {
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [localMembers, setLocalMembers] = useState(members);
   const { setMemberStore } = useMemberEditStore();
   const methods = useForm();
 
@@ -50,6 +51,14 @@ const handleCloseDelete = () => {
     setIsModalDeleteOpen(false);
     setSelectedMember(null);
 }
+
+const handleAddMemberSuccess = (newMember) => {
+  setLocalMembers((prevMembers) => [newMember, ...prevMembers]);
+};
+
+const handleDeleteMemberSuccess = (deletedMemberId) => {
+  setLocalMembers((prevMembers) => prevMembers.filter((member) => member.id !== deletedMemberId));
+}
   
   return (
     <>
@@ -65,7 +74,7 @@ const handleCloseDelete = () => {
           <TableColumn>ACCIONES</TableColumn>
         </TableHeader>
         <TableBody>
-          {members.map((memberItem) => (
+          {localMembers.map((memberItem) => (
             <TableRow key={memberItem.id}>
               <TableCell className={`${inter.className} text-black`}>{memberItem.firstName}</TableCell>
               <TableCell className={`${inter.className} text-black`}>{memberItem.lastName}</TableCell>
@@ -92,8 +101,8 @@ const handleCloseDelete = () => {
         </TableBody>
       </Table>
       <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
-      <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
-      <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} />
+      <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
+      <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} onDeleteSuccess={handleDeleteMemberSuccess} />
     </FormProvider>
     </>
   );

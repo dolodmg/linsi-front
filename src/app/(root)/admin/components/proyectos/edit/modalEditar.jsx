@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { Modal, ModalContent, ModalBody, ModalHeader, Divider, Button } from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, ModalHeader, Divider } from '@nextui-org/react';
 import { useProjectEditStore, useFormStoreProject } from '@/app/store';
 import { editProjectAction } from '@/actions/project';
 import Title from './titleInput';
