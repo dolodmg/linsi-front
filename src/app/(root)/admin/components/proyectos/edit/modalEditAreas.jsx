@@ -1,30 +1,43 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider, Select, SelectItem } from '@nextui-org/react';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { Inter } from 'next/font/google';
 import ButtonsAction from '../../buttonsAction';
 import { addAreaToProjectAction } from '@/actions/project_area';
 import { useRouter } from 'next/navigation';
 import CreateComponentButton from '../../createComponentButton';
 import ModalAddArea from '../../areas/add/modalAddArea';
+import ModalDeleteArea from '../delete/modalDeleteArea';
 
 const inter = Inter(
     { subsets: ['latin'] },
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas }) => {
+const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas }) => {
 
     const [selectedAreas, setSelectedAreas] = useState([]);
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [adding, setAdding] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [ area, setArea ] = useState(null);
+    const [localAreas, setLocalAreas] = useState(areas);
+
+    const [projectAreas, setProjectAreas] = useState(
+        areasByProject[selectedProject?.id] || []
+    );
+
+    useEffect(() => {
+        if (selectedProject) {
+            setProjectAreas(areasByProject[selectedProject.id] || []);
+        }
+    }, [selectedProject, areasByProject]);
 
     if (!selectedProject) return null;
-    const projectAreas = areasByProject[selectedProject.id] || [];
-
-    const availableAreas = areas.filter(area => 
+    
+    const availableAreas = localAreas.filter(area => 
         !projectAreas.some(projectAreas => projectAreas.id === area.id)
     );
 
@@ -50,10 +63,6 @@ const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas
         }
     };
 
-    const handleCloseModal = () => {
-        setSelectedAreas([]);
-        onClose();
-    }
 
     const handleOpenAddAreaModal = () => {
         setIsModalAddOpen(true);
@@ -64,9 +73,29 @@ const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas
         router.refresh();
     }
 
+    const handleOpenDeleteModal = (area) => {
+        setArea(area);
+        setIsModalDeleteOpen(true);
+    }
+
+    const handleDeleteClose = () => {
+        setIsModalDeleteOpen(false);
+        router.refresh();
+    }
+
+    const handleAddAreaSuccess = (newArea) => {
+        setLocalAreas((prev) => [newArea, ...prev]);
+        router.refresh();
+    }
+
+    const handleDeleteAreaSuccess = (deletedAreaId) => {
+        setProjectAreas((prev) => prev.filter((area) => area.id !== deletedAreaId));
+        router.refresh();
+    }
+
     return (
         <>
-        <Modal isOpen={isOpen} onClose={handleCloseModal} size='2xl'>
+        <Modal isOpen={isOpen} onClose={onClose} size='2xl'>
             <ModalContent>
                 {(onClose) => (
                     <>
@@ -102,10 +131,28 @@ const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas
                             <div>
                                 <CreateComponentButton onClick={handleOpenAddAreaModal} component="área" />
                             </div>
-                            
+                            <div>
+                                <p className={`${inter.className} text-sm text-black font-medium mb-2`}>Áreas vinculadas:</p>
+                                {projectAreas.length > 0 ? (
+                                    <ul>
+                                        {projectAreas.map((area) => (
+                                            <li key={area.id} className={`${inter.className} text-black text-sm`}>
+                                                <div className='flex flex-row items-center mb-2'>
+                                                    <button onClick={() => handleOpenDeleteModal(area) }>
+                                                        <RemoveIcon fontSize='small' className='text-white bg-red-700 rounded-md mr-1' />
+                                                    </button>                                       
+                                                    {`${area.name}`}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className={`${inter.className} text-gray-400 text-sm`}>No hay áreas vinculadas</p>
+                                )}
+                            </div>
                             <ButtonsAction
                             isLoading={adding}
-                            onClose={handleCloseModal}
+                            onClose={onClose}
                             onSubmit={addAreaToProject}
                             submitLabel="Agregar"
                             className='flex justify-end gap-2 mt-4'
@@ -115,9 +162,10 @@ const ModalAddAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas
                 )}
             </ModalContent>
         </Modal>
-        <ModalAddArea isOpen={isModalAddOpen} onClose={handleAddClose} />
+        <ModalAddArea isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddAreaSuccess}/>
+        <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleDeleteClose} selectedProject={selectedProject} area={area} onDeleteSuccess={handleDeleteAreaSuccess} />
         </>
     )
 }
 
-export default ModalAddAreas;
+export default ModalEditAreas;

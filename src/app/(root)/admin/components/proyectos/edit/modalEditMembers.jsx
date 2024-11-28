@@ -1,30 +1,42 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider, Select, SelectItem } from '@nextui-org/react';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { Inter } from 'next/font/google';
 import ButtonsAction from '../../buttonsAction';
 import { addMemberToProjectAction } from '@/actions/project_member';
 import { useRouter } from 'next/navigation';
 import CreateComponentButton from '../../createComponentButton';
 import ModalAgregar from '../../integrantes/add/modalAgregar';
+import ModalDeleteMember from '../delete/modalDeleteMember';
 
 const inter = Inter(
     { subsets: ['latin'] },
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, members }) => {
+const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, members }) => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [adding, setAdding] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [ member, setMember ] = useState(null);
+    const [localMembers, setLocalMembers] = useState(members);
+
+    const [projectMembers, setProjectMembers] = useState(
+        membersByProject[selectedProject?.id] || []
+    );
+
+    useEffect(() => {
+        if (selectedProject) {
+            setProjectMembers(membersByProject[selectedProject.id] || []);
+        }
+    }, [selectedProject, membersByProject]);
 
     if (!selectedProject) return null;
-    const projectMembers = membersByProject[selectedProject.id] || [];
-
-    const availableMembers = members.filter(member => 
+    const availableMembers = localMembers.filter(member => 
         !projectMembers.some(projectMember => projectMember.id === member.id)
     );
 
@@ -50,11 +62,6 @@ const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, m
         }
     };
 
-    const handleCloseModal = () => {
-        setSelectedMembers([]);
-        onClose();
-    }
-
     const handleOpenAddMemberModal = () => {
         setIsModalAddOpen(true);
     }
@@ -64,9 +71,29 @@ const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, m
         router.refresh();
     }
 
+    const handleOpenDeleteModal = (member) => {
+        setMember(member);
+        setIsModalDeleteOpen(true);
+    }
+
+    const handleDeleteClose = () => {
+        setIsModalDeleteOpen(false);
+        router.refresh();
+    }
+
+    const handleAddMemberSuccess = (newMember) => {
+        setLocalMembers((prev) => [newMember, ...prev]);
+        router.refresh(); 
+    };
+    
+    const handleDeleteMemberSuccess = (deletedMemberId) => {
+        setProjectMembers((prev) => prev.filter((member) => member.id !== deletedMemberId));
+        router.refresh();
+    };
+
     return (
         <>
-        <Modal isOpen={isOpen} onClose={handleCloseModal} size='2xl'>
+        <Modal isOpen={isOpen} onClose={onClose} size='2xl'>
             <ModalContent>
                 {(onClose) => (
                     <>
@@ -76,7 +103,7 @@ const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, m
                         <Divider/>
                         <ModalBody>
                             <div className='flex flex-col py-2'>
-                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná uno o más integrantes para agregar al proyecto {selectedProject.name}:</p>
+                                <p className={`${inter.className} text-black font-medium text-sm mb-2`}>Seleccioná uno o más integrantes para agregar al proyecto "{selectedProject.name}":</p>
                                 <Select
                                 label='Integrantes'
                                 placeholder='Seleccioná los integrantes'
@@ -102,10 +129,30 @@ const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, m
                             <div>
                                 <CreateComponentButton onClick={handleOpenAddMemberModal} component="integrante" />
                             </div>
-                            
+                            <div>
+                                <p className={`${inter.className} text-black text-sm font-medium mb-2`}>Integrantes actuales:</p>
+                                {projectMembers.length > 0 ? (
+                                    <ul>
+                                        {projectMembers.map(member => (
+                                            <li key={member.id} className={`${inter.className} text-black text-sm`}>
+                                                <div className='flex flex-row items-center mb-2'>
+                                                    <button onClick={() => handleOpenDeleteModal(member) }>
+                                                        <RemoveIcon fontSize='small' className='text-white bg-red-700 rounded-md mr-1' />
+                                                    </button>                                       
+                                                    {`${member.firstName} ${member.lastName}`}
+                                                </div>
+                                            </li>
+                                        )) }
+                                    </ul> 
+                                ) : (
+                                    <p className={`${inter.className} text-sm text-gray-400`}>
+                                        No se encontraron integrantes para este proyecto
+                                    </p>
+                                )}
+                            </div>
                             <ButtonsAction
                             isLoading={adding}
-                            onClose={handleCloseModal}
+                            onClose={onClose}
                             onSubmit={addMemberToProject}
                             submitLabel="Agregar"
                             className='flex justify-end gap-2 mt-4'
@@ -115,9 +162,10 @@ const ModalAddMembers = ({ isOpen, onClose, selectedProject, membersByProject, m
                 )}
             </ModalContent>
         </Modal>
-        <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
+        <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess} />
+        <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleDeleteClose} selectedProject={selectedProject} member={member} onDeleteSuccess={handleDeleteMemberSuccess}/>
         </>
     )
 }
 
-export default ModalAddMembers;
+export default ModalEditMembers;
