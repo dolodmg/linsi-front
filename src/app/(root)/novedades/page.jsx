@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { Header } from '../../components/header';
 import { NovedadList } from './components/novedadList';
+import { NovedadModal } from './components/NovedadModal';
 import { Divider } from '@nextui-org/react';
 import { LinkInicio } from '@/app/components/linkInicio';
 import { getAllNewsAction } from '@/actions/news';
-import { CarouselWithContent } from '../../components/carousel';
-
 
 const Novedades = () => {
   const [novedades, setNovedades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedNovedad, setSelectedNovedad] = useState(null); // Estado para controlar la novedad seleccionada
 
   useEffect(() => {
     const fetchNovedades = async () => {
@@ -28,6 +28,15 @@ const Novedades = () => {
     fetchNovedades();
   }, []);
 
+  const handleNovedadClick = (novedad) => {
+    console.log("Novedad seleccionada:", novedad);
+    setSelectedNovedad(novedad); // Guardamos la novedad seleccionada para mostrarla en el modal
+  };
+
+  const handleCloseModal = () => {
+    setSelectedNovedad(null); // Cerrar el modal al limpiar la novedad seleccionada
+  };
+
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>{error}</p>;
 
@@ -38,11 +47,16 @@ const Novedades = () => {
         <LinkInicio />
         <Divider />
         <div className="flex flex-row justify-start items-center space-x-4 overflow-x-auto w-full py-4">
-          <NovedadList novedades={novedades} />
+          <NovedadList novedades={novedades} onNovedadClick={handleNovedadClick} />
         </div>
       </div>
+
+      {/* Modal para mostrar el detalle de la novedad seleccionada */}
+      {selectedNovedad && (
+        <NovedadModal novedad={selectedNovedad} onClose={handleCloseModal} />
+      )}
     </div>
-  )
+  );
 };
 
 export default Novedades;
