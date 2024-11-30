@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link'; // Importa el componente Link de Next.js
 import { Card, CardHeader, CardBody, Divider } from '@nextui-org/react';
 import Slider from "react-slick";
+import { format, parseISO } from 'date-fns';
 
 export const NovedadList = ({ novedades }) => {
   const settings = {
@@ -99,7 +100,10 @@ export const NovedadList = ({ novedades }) => {
                         {truncateText(novedad.description, 100)} {/* Cambia 100 por el número de caracteres deseado */}
                       </p>
                       <p className="text-xs text-gray-400 mt-2">
-                        Fecha: {new Date(novedad.publicationDate).toLocaleDateString()}
+                        Fecha: {" "}
+                        {novedad.publicationDate 
+                        ? format(new Date(novedad.publicationDate), 'dd/MM/yyyy HH:mm')
+                        : 'Fecha no disponible'}
                       </p>
                     </CardBody>
                   </Card>

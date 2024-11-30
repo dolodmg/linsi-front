@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
+import { format, parseISO } from 'date-fns';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteButton from '../deleteButton';
 import AddButton from '../addButton';
@@ -90,7 +91,11 @@ export const TableNovedades = ({ news }) => {
                             {localNews.map((newsItem) => (
                                 <TableRow key={newsItem.id}>
                                     <TableCell className={`${inter.className} text-black`}>{newsItem.title}</TableCell>
-                                    <TableCell className={`${inter.className} text-black`}>{newsItem.publicationDate}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>
+                                    {newsItem.publicationDate 
+                                    ? format(new Date(newsItem.publicationDate), 'dd/MM/yyyy HH:mm')
+                                    : 'Fecha no disponible'}
+                                    </TableCell>
                                     <TableCell className={`${inter.className} text-black`}>
                                     <Button className='bg-bg-blue text-white' size='md' onClick={() => handleDetailClick(newsItem)}>
                                         Ver detalle
