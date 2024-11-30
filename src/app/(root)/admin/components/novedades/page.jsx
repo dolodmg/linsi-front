@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Inter } from 'next/font/google';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteButton from '../deleteButton';
@@ -77,42 +77,50 @@ export const TableNovedades = ({ news }) => {
         <>
         <AddButton onClick={handleAddNew} component="novedad" />
         <FormProvider {...methods}>
-            <Table aria-label="Lista de novedades" className='mt-2'>
-                <TableHeader>
-                    <TableColumn>TÍTULO</TableColumn>
-                    <TableColumn>FECHA DE PUBLICACIÓN</TableColumn>
-                    <TableColumn>MÁS INFORMACIÓN</TableColumn>
-                    <TableColumn>ACCIONES</TableColumn>
-                </TableHeader>
-                <TableBody>
-                    {localNews.map((newsItem) => (
-                        <TableRow key={newsItem.id}>
-                            <TableCell className={`${inter.className} text-black`}>{newsItem.title}</TableCell>
-                            <TableCell className={`${inter.className} text-black`}>{newsItem.publicationDate}</TableCell>
-                            <TableCell className={`${inter.className} text-black`}>
-                            <Button className='bg-bg-blue text-white' size='md' onClick={() => handleDetailClick(newsItem)}>
-                                Ver detalle
-                            </Button>
-                            </TableCell>
-                            <TableCell>
-                                <div className='flex gap-1'>
-                                    <button
-                                    onClick={() => handleEditClick(newsItem)}
-                                    className='p-1 bg-white text-bg-blue'>
-                                        <EditIcon />
-                                    </button>
-                                    <DeleteButton onClick={() => handleDeleteModal(newsItem)} />
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <ModalAddNew isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddNewSuccess} />
-            <EditModal isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
-            <ModalDeleteNew isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedNew={selectedNew} onDeleteSuccess={handleDeleteNewSuccess} />
-            <DetailModal isOpen={isModalDetailOpen} onClose={handleCloseDetail} selectedNew={selectedNew} />
+            {news.length > 0 ? (
+                <>
+                    <Table aria-label="Lista de novedades" className='mt-2'>
+                        <TableHeader>
+                            <TableColumn>TÍTULO</TableColumn>
+                            <TableColumn>FECHA DE PUBLICACIÓN</TableColumn>
+                            <TableColumn>MÁS INFORMACIÓN</TableColumn>
+                            <TableColumn>ACCIONES</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                            {localNews.map((newsItem) => (
+                                <TableRow key={newsItem.id}>
+                                    <TableCell className={`${inter.className} text-black`}>{newsItem.title}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>{newsItem.publicationDate}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>
+                                    <Button className='bg-bg-blue text-white' size='md' onClick={() => handleDetailClick(newsItem)}>
+                                        Ver detalle
+                                    </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className='flex gap-1'>
+                                            <button
+                                            onClick={() => handleEditClick(newsItem)}
+                                            className='p-1 bg-white text-bg-blue'>
+                                                <EditIcon />
+                                            </button>
+                                            <DeleteButton onClick={() => handleDeleteModal(newsItem)} />
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <ModalAddNew isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddNewSuccess} />
+                    <EditModal isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
+                    <ModalDeleteNew isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedNew={selectedNew} onDeleteSuccess={handleDeleteNewSuccess} />
+                    <DetailModal isOpen={isModalDetailOpen} onClose={handleCloseDetail} selectedNew={selectedNew} />
+                </>
+            ) : (
+                <Card>
+                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+              </Card>
+            )}
         </FormProvider>
-        </>
+    </>
     )
 }
