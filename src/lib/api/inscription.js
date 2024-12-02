@@ -6,7 +6,7 @@ export async function getInscription(id) { //Obtiene inscripciones por id
 }
 
 export async function createInscription(formData) { //Crea una inscripción
-    return await apiRequest(`/registration`, 'POST', formData, 'multipart/form-data', true)
+    return await apiRequest(`/registration`, 'POST', formData, 'multipart/form-data', false)
 }
 
 export async function getInscriptions() { //Obtiene todas las inscripciones
