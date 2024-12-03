@@ -14,21 +14,23 @@ const options = [
     {key: "5", label: "5° año"}
 ];
 
-export const SelectField = () => (
-    <div className='flex flex-col'>
-        <p className={`${inter.className} text-black font-medium text-md mb-1`}>Año de cursada</p>   
-        <div className='flex w-full flex-wrap'>
-            <Select 
-                size='md'
-                placeholder="Seleccioná una opción" 
-                className="min-w-[194px]"
-            >
-                {options.map((option) => (
-                    <SelectItem className='text-gray-700' key={option.key} value={option.key}>
-                        {option.label}
-                    </SelectItem>
-                ))}
-            </Select>
-        </div>
+export const SelectField = ({ value, onChange }) => (
+    <div className="flex flex-col">
+      <p className="text-black font-medium text-md mb-2">Año de cursada</p>
+      <Select
+        aria-label="Selecciona el año de cursada"
+        size="md"
+        placeholder="Seleccioná una opción"
+        value={value}
+        onChange={(e) => onChange(e)}
+        className="min-w-[194px]"
+      >
+        {options.map((option) => (
+          <SelectItem key={option.key} value={option.key}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </Select>
     </div>
-);
+  );
+  

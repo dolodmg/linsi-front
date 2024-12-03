@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Inter } from 'next/font/google';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
 import { useMemberEditStore } from "@/app/store";
 import EditIcon from '@mui/icons-material/Edit';
@@ -64,45 +64,53 @@ const handleDeleteMemberSuccess = (deletedMemberId) => {
     <>
     <AddButton onClick={handleAddClick} component='integrante' />
     <FormProvider {...methods}>
-      <Table aria-label="Example table with custom cells" className='mt-2'>
-        <TableHeader>
-          <TableColumn>NOMBRE</TableColumn>
-          <TableColumn>APELLIDO</TableColumn>
-          <TableColumn>EMAIL</TableColumn>
-          <TableColumn>ROL</TableColumn>
-          <TableColumn>IMAGEN</TableColumn>
-          <TableColumn>ACCIONES</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {localMembers.map((memberItem) => (
-            <TableRow key={memberItem.id}>
-              <TableCell className={`${inter.className} text-black`}>{memberItem.firstName}</TableCell>
-              <TableCell className={`${inter.className} text-black`}>{memberItem.lastName}</TableCell>
-              <TableCell className={`${inter.className} text-black`}>{memberItem.email}</TableCell>
-              <TableCell className={`${inter.className} text-black`}>{memberItem.role?.name}</TableCell>
-              <TableCell>
-                <img src={memberItem.s3Url} 
-                alt={`${memberItem.firstName} ${memberItem.lastName}`} 
-                className='rounded-full overflow-hidden object-cover w-[100px] h-[100px]'/>
-              </TableCell>
-              <TableCell>
-                <div className='flex gap-1'>
-                <button
-                  onClick={() => handleEditClick(memberItem)}
-                  className='p-1 bg-white text-bg-blue'
-                >
-                  <EditIcon fontSize='medium' />
-                </button>
-                <DeleteButton onClick={() => handleDeleteModal(memberItem)} />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
-      <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
-      <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} onDeleteSuccess={handleDeleteMemberSuccess} />
+      {members.length > 0 ? (
+        <>
+          <Table aria-label="Example table with custom cells" className='mt-2'>
+            <TableHeader>
+              <TableColumn>NOMBRE</TableColumn>
+              <TableColumn>APELLIDO</TableColumn>
+              <TableColumn>EMAIL</TableColumn>
+              <TableColumn>ROL</TableColumn>
+              <TableColumn>IMAGEN</TableColumn>
+              <TableColumn>ACCIONES</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {localMembers.map((memberItem) => (
+                <TableRow key={memberItem.id}>
+                  <TableCell className={`${inter.className} text-black`}>{memberItem.firstName}</TableCell>
+                  <TableCell className={`${inter.className} text-black`}>{memberItem.lastName}</TableCell>
+                  <TableCell className={`${inter.className} text-black`}>{memberItem.email}</TableCell>
+                  <TableCell className={`${inter.className} text-black`}>{memberItem.role?.name}</TableCell>
+                  <TableCell>
+                    <img src={memberItem.s3Url} 
+                    alt={`${memberItem.firstName} ${memberItem.lastName}`} 
+                    className='rounded-full overflow-hidden object-cover w-[100px] h-[100px]'/>
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex gap-1'>
+                      <button
+                        onClick={() => handleEditClick(memberItem)}
+                        className='p-1 bg-white text-bg-blue'
+                      >
+                        <EditIcon fontSize='medium' />
+                      </button>
+                      <DeleteButton onClick={() => handleDeleteModal(memberItem)} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
+          <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
+          <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} onDeleteSuccess={handleDeleteMemberSuccess} />
+        </>
+      ) : (
+        <Card>
+          <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+        </Card>
+      )}
     </FormProvider>
     </>
   );

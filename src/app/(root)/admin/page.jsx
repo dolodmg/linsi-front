@@ -9,12 +9,14 @@ import { getMembersByProjectAction } from '@/actions/project_member';
 import { getAreasByProjectAction } from '@/actions/project_area';
 import { getMembersByAreaAction} from '@/actions/area_member';
 import { getAllNewsAction } from '@/actions/news';
+import { getInscriptionsAction } from '@/actions/inscription';
 
 const Admin = () => {
     const [members, setMembers] = useState([]);
     const [projects, setProjects] = useState([]);
     const [areas, setAreas] = useState([]);
     const [news, setNews] = useState([]);
+    const [inscriptions, setInscriptions] = useState([]);
     const [membersByProject, setMembersByProject] = useState({});
     const [areasByProject, setAreasByProject] = useState({});
     const [membersByArea, setMembersByArea] = useState({});
@@ -46,6 +48,20 @@ const Admin = () => {
             }
         };
         fetchNews();
+    }, []);
+
+    useEffect(() => {
+        const fetchInscriptions = async () => {
+            try {
+                const inscriptionsData = await getInscriptionsAction();
+                setInscriptions(inscriptionsData);
+            } catch (error) {
+                console.log('Error al obtener inscripciones', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchInscriptions();
     }, []);
 
     useEffect(() => {
@@ -126,7 +142,7 @@ const Admin = () => {
     return (
         <div className='flex flex-col mx-8'>
             <User />
-            <TabsComponent members={members} projects={projects} areas={areas} news={news} membersByProject={membersByProject} areasByProject={areasByProject} membersByArea={membersByArea}/>
+            <TabsComponent members={members} projects={projects} areas={areas} news={news} inscriptions={inscriptions} membersByProject={membersByProject} areasByProject={areasByProject} membersByArea={membersByArea}/>
         </div>
     );
 };

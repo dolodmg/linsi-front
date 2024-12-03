@@ -2,9 +2,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader, Divider } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SelectMembers from './selectMembers';
-
 const inter = Inter(
     { subsets: ['latin'] },
     { weights: ['400, 500, 600, 700'] }

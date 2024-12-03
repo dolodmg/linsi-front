@@ -34,6 +34,7 @@ const ModalAddArea = ({ isOpen, onClose, onAddSuccess }) => {
             onAddSuccess(newArea)
             onClose();
             setErrors({});
+            router.refresh();
         } catch (error) {
             console.log(error);
             setError(`Error al crear área: ${error.message}`);

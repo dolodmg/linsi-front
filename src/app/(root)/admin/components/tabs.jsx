@@ -1,18 +1,14 @@
 "use client"
 import React from 'react'
-import { Tabs, Tab, Card, CardBody } from '@nextui-org/react'
+import { Tabs, Tab } from '@nextui-org/react'
 import { Inter } from 'next/font/google'
 import { TableIntegrantes } from './integrantes/page'
 import { TableProyectos } from './proyectos/page'
 import { TableAreas } from './areas/page'
 import { TableNovedades } from './novedades/page'
+import { TableInscripciones } from './inscripciones/page'
 
-const inter = Inter(
-    {subsets: ['latin']},
-    {weight: '400'}
-)
-
-export const TabsComponent = ({ members, projects, areas, news, membersByProject, areasByProject, membersByArea }) => {
+export const TabsComponent = ({ members, projects, areas, news, inscriptions, membersByProject, areasByProject, membersByArea }) => {
     return (
         <div className="flex w-full flex-col">
             <Tabs aria-label="Options" color='primary'>
@@ -29,11 +25,7 @@ export const TabsComponent = ({ members, projects, areas, news, membersByProject
                     <TableAreas areas={areas} membersByArea={membersByArea} members={members}/>
                 </Tab>
                 <Tab key="inscripciones" title="Inscripciones">
-                <Card>
-                    <CardBody>
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </CardBody>
-                </Card>  
+                    <TableInscripciones inscriptions={inscriptions}/>
             </Tab>
         </Tabs>
     </div>  

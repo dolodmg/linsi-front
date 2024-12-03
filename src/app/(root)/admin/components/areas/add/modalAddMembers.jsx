@@ -7,6 +7,8 @@ import { addMemberToAreaAction } from '@/actions/area_member';
 import { useRouter } from 'next/navigation';
 import CreateComponentButton from '../../createComponentButton';
 import ModalAgregar from '../../integrantes/add/modalAgregar';
+import ModalDeleteMember from '../delete/modalDeleteMember';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const inter = Inter(
     { subsets: ['latin'] },
@@ -16,15 +18,24 @@ const inter = Inter(
 const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members }) => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [adding, setAdding] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [ member, setMember ] = useState(null);
+    const [localMembers, setLocalMembers] = useState(members);
+    const [areaMembers, setAreaMembers] = useState(
+        membersByArea[selectedArea?.id] || []
+    );
+
+    useEffect(() => {
+        if (selectedArea) {
+            setAreaMembers(membersByArea[selectedArea.id] || []);
+        }
+    }, [selectedArea, membersByArea]);
 
     if (!selectedArea) return null;
-    const areaMembers = membersByArea[selectedArea.id] || [];
-
-    const availableMembers = members.filter(member => 
+    const availableMembers = localMembers.filter(member => 
         !areaMembers.some(areaMember => areaMember.id === member.id)
     );
 
@@ -50,11 +61,6 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
         }
     };
 
-    const handleCloseModal = () => {
-        setSelectedMembers([]);
-        onClose();
-    }
-
     const handleOpenAddMemberModal = () => {
         setIsModalAddOpen(true);
     }
@@ -64,9 +70,29 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
         router.refresh();
     }
 
+    const handleOpenDeleteModal = (member) => {
+        setMember(member);
+        setIsModalDeleteOpen(true);
+    }
+
+    const handleDeleteClose = () => {
+        setIsModalDeleteOpen(false);
+        router.refresh();
+    }
+
+    const handleAddMemberSuccess = (newMember) => {
+        setLocalMembers((prev) => [newMember, ...prev]);
+        router.refresh(); 
+    };
+    
+    const handleDeleteMemberSuccess = (deletedMemberId) => {
+        setAreaMembers((prev) => prev.filter((member) => member.id !== deletedMemberId));
+        router.refresh();
+    };
+
     return (
         <>
-        <Modal isOpen={isOpen} onClose={handleCloseModal} size='2xl'>
+        <Modal isOpen={isOpen} onClose={onClose} size='2xl'>
             <ModalContent>
                 {(onClose) => (
                     <>
@@ -102,10 +128,30 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                             <div>
                                 <CreateComponentButton onClick={handleOpenAddMemberModal} component="integrante" />
                             </div>
-                            
+                            <div>
+                                <p className={`${inter.className} text-black text-sm font-medium mb-2`}>Integrantes actuales:</p>
+                            {areaMembers.length > 0 ? (
+                                    <ul>
+                                        {areaMembers.map(member => (
+                                            <li key={member.id} className={`${inter.className} text-sm text-black`}>
+                                                <div className='flex flex-row items-center mb-2'>
+                                                    <button onClick={() => handleOpenDeleteModal(member) }>
+                                                        <RemoveIcon fontSize='small' className='text-white bg-red-700 rounded-md mr-1' />
+                                                    </button>                                       
+                                                    {`${member.firstName} ${member.lastName}`}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>              
+                                ) : (
+                                    <p className={`${inter.className} text-gray-400 text-sm`}>
+                                        No se encontraron integrantes para este área
+                                    </p>
+                                )}
+                            </div>
                             <ButtonsAction
                             isLoading={adding}
-                            onClose={handleCloseModal}
+                            onClose={onClose}
                             onSubmit={addMemberToArea}
                             submitLabel="Agregar"
                             className='flex justify-end gap-2 mt-4'
@@ -115,7 +161,8 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                 )}
             </ModalContent>
         </Modal>
-        <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} />
+        <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
+        <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleDeleteClose} selectedArea={selectedArea} member={member} onDeleteSuccess={handleDeleteMemberSuccess}/>
         </>
     )
 }

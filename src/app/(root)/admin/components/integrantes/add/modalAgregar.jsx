@@ -63,6 +63,7 @@ const ModalAgregar = ({ isOpen, onClose, onAddSuccess }) => {
             onAddSuccess(newMember);
             onClose();
             setErrors({});
+            router.refresh();
         } catch (error) {
             console.error('Error al añadir el miembro:', error);
             setError(`Error al añadir el miembro: ${error.message}`);
