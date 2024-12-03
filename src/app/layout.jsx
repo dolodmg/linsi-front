@@ -26,14 +26,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`flex flex-col min-h-screen bg-bg-light-grey`}>
         <NextUIProvider locale="es-ES">
-        <Navbar />
-        <main className="flex-grow overflow-auto"> 
-          {children}
-        </main>
-        <Footer />
-        </NextUIProvider> 
+          <Navbar />
+          <main className="flex-grow overflow-auto">
+            {children}
+          </main>
+          <Footer />
+        </NextUIProvider>
       </body>
     </html>
   );
 }
+
 
