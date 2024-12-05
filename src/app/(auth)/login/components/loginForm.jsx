@@ -3,21 +3,23 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import { loginAction } from "@/actions/auth";
+import { useAuth } from '@/context/AuthContext';
 
 const LoginForm = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
+    const { setIsLoggedIn } = useAuth();
 
     const handleLogin = async (data) => {
         try {
-            await loginAction(data)
-            router.push('/')
+          await loginAction(data);
+          setIsLoggedIn(true); // Actualiza el contexto
+          router.push('/admin');
         } catch (error) {
-            // TODO: hacer los toast ;)
-            // errorToast(error.message)
+          console.error(error);
         }
-    }
+    };
 
     return (
         <section className="bg-blue-500 p-8 shadow-lg w-full max-w-xl mx-auto min-h-[40vh] rounded-xl">

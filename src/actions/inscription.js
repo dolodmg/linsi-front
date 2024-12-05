@@ -5,10 +5,13 @@ export async function getInscriptionAction(id) {
     const {data, headers} = await getInscription(id)
     return data
 }
-
 export async function createInscriptionAction(formData) {
-    const {data, headers} = await createInscription(formData)
-    return data
+    try {
+        return await createInscription(formData);
+    } catch (error) {
+        console.error('Error en la inscripción:', error);
+        throw error; 
+    }
 }
 
 export async function getInscriptionsAction() {

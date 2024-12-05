@@ -20,13 +20,23 @@ export async function getToken(){
   return session.token
 }
 
-export async function getSession(){
-  return await getIronSession(
-    cookies(), {
+export async function getSession() {
+  const session = await getIronSession(
+    cookies(),
+    {
       password: process.env.SESSION_SECRET,
-      cookieName: "session", 
+      cookieName: "session",
       cookieOptions: {
         httpOnly: true,
-      }
-    })
+        secure: process.env.NODE_ENV === "production", // Usa secure en producción
+      },
+    }
+  );
+
+  // Si no hay token, limpia cualquier dato residual
+  if (!session?.token) {
+    session.destroy();
+  }
+
+  return session;
 }

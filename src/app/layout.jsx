@@ -4,6 +4,7 @@ import Navbar from "./components/navbar";
 import "./globals.css";
 import Footer from "./components/footer";
 import { NextUIProvider } from "@nextui-org/react";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,14 +27,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`flex flex-col min-h-screen bg-bg-light-grey`}>
         <NextUIProvider locale="es-ES">
-        <Navbar />
-        <main className="flex-grow overflow-auto"> 
-          {children}
-        </main>
-        <Footer />
-        </NextUIProvider> 
+          <AuthProvider> {/* Envolver la aplicación con AuthProvider */}
+            <Navbar />
+            <main className="flex-grow overflow-auto">
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
+        </NextUIProvider>
       </body>
     </html>
   );
 }
-
