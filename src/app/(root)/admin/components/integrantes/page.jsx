@@ -103,15 +103,15 @@ const handleDeleteMemberSuccess = (deletedMemberId) => {
             </TableBody>
           </Table>
           <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
-          <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
           <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} onDeleteSuccess={handleDeleteMemberSuccess} />
         </>
       ) : (
-        <Card>
-          <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+        <Card className='mt-2'>
+          <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay integrantes registrados</p>
         </Card>
       )}
     </FormProvider>
+    <ModalAgregar isOpen={isModalAddOpen} onClose={handleAddClose} onAddSuccess={handleAddMemberSuccess}/>
     </>
   );
 };

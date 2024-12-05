@@ -115,17 +115,17 @@ export const TableNovedades = ({ news }) => {
                             ))}
                         </TableBody>
                     </Table>
-                    <ModalAddNew isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddNewSuccess} />
                     <EditModal isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
                     <ModalDeleteNew isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedNew={selectedNew} onDeleteSuccess={handleDeleteNewSuccess} />
                     <DetailModal isOpen={isModalDetailOpen} onClose={handleCloseDetail} selectedNew={selectedNew} />
                 </>
             ) : (
-                <Card>
-                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+                <Card className='mt-2'>
+                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay novedades registradas</p>
               </Card>
             )}
         </FormProvider>
+        <ModalAddNew isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddNewSuccess} />
     </>
     )
 }

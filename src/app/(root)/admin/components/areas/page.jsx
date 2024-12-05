@@ -92,15 +92,15 @@ export const TableAreas = ({ areas, membersByArea, members }) => {
                             </TableBody>
                         </Table>
                         <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
-                        <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} onAddSuccess={handleAddAreaSuccess}/>
                         <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedArea={selectedArea} onDeleteSuccess={handleDeleteAreaSuccess} />
                     </>
                 ) : (
-                    <Card>
-                        <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+                    <Card className='mt-2'>
+                        <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay áreas registradas</p>
                     </Card>
                 )}
             </FormProvider>
+            <ModalAddArea isOpen={isModalAddAreaOpen} onClose={handleAddAreaClose} onAddSuccess={handleAddAreaSuccess}/>
         </>
     )
 }

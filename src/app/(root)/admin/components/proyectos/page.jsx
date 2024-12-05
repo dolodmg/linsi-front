@@ -157,14 +157,14 @@ export const TableProyectos = ({ projects, membersByProject, areasByProject, mem
                     <ModalDetalle isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} selectedProject={selectedProject} membersByProject={membersByProject} areasByProject={areasByProject} members={members} />
                     <ModalEditar isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
                     <ModalDeleteProject isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedProject={selectedProject} onDeleteSuccess={handleDeleteProjectSuccess} />
-                    <ModalAddProject isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddProjectSuccess} />
                 </>
             ) : (
-                <Card>
-                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay inscripciones registradas</p>
+                <Card className='mt-2'>
+                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay proyectos registrados</p>
                 </Card>
             )}
         </FormProvider>
+        <ModalAddProject isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddProjectSuccess} />
     </>
     )
 }
