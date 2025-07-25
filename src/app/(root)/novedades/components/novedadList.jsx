@@ -15,6 +15,22 @@ export const NovedadList = ({ novedades }) => {
     draggable: false,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024, // Tablets o laptops chicas
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // Celulares grandes
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   // Función para truncar el texto
@@ -70,7 +86,7 @@ export const NovedadList = ({ novedades }) => {
   }
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="container mx-auto px-2 sm:px-4 py-4">
       {novedades.length > 0 ? (
         <Slider {...settings}>
           {novedades.map((novedad) => (

@@ -41,10 +41,10 @@ const NovedadDetalle = ({ params }) => {
         </Link>
 
         {novedad ? (
-          <article className="flex flex-col md:flex-row gap-8 bg-white shadow-md rounded-lg overflow-hidden">
+          <article className="flex flex-col md:flex-row gap-6 bg-white shadow-md rounded-lg overflow-hidden">
             {/* Imagen de la noticia */}
             {novedad.s3Url && (
-              <div className="md:w-1/3">
+              <div className="w-full md:w-1/3 max-h-64 md:max-h-full overflow-hidden">
                 <img
                   src={novedad.s3Url}
                   alt="Imagen de la novedad"
@@ -53,25 +53,24 @@ const NovedadDetalle = ({ params }) => {
               </div>
             )}
 
-          {/* Contenido del artículo */}
-          <div className="p-6 md:w-2/3 flex flex-col justify-start">
-            <header>
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                {novedad.title}
-              </h1>
-              <p className="text-sm text-gray-500">
-                Fecha de publicación:{" "}
-                {new Date(novedad.publicationDate).toLocaleDateString()}
-              </p>
-            </header>
+            {/* Contenido del artículo */}
+            <div className="p-4 sm:p-6 md:w-2/3 flex flex-col justify-start">
+              <header>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                  {novedad.title}
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Fecha de publicación:{" "}
+                  {new Date(novedad.publicationDate).toLocaleDateString()}
+                </p>
+              </header>
 
-            <section className="mt-6">
-              <p className="text-lg text-gray-700 leading-relaxed">
-                {novedad.description}
-              </p>
-            </section>
-          </div>
-
+              <section className="mt-4 sm:mt-6">
+                <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
+                  {novedad.description}
+                </p>
+              </section>
+            </div>
           </article>
         ) : (
           <p className="text-center">No se encontró la novedad.</p>

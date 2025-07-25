@@ -16,7 +16,10 @@ export const RoleName = ({ roles, members, areasByMember }) => {
                     const filteredMembers = members.filter(member => member.role.id === role.id);
                     return (
                         <div key={role.id} className='flex flex-col items-center justify-center'>
-                            <h1 className={`${bree.className} text-xl text-bg-blue mt-4`}>{role.name}</h1>
+                            <h1 className={`${bree.className} text-xl text-bg-blue mt-4`}>
+                                {role.name === 'Becario' ? 
+                                'Becarios' : role.name} 
+                            </h1>
                             <MemberContainer members={filteredMembers} areasByMember={areasByMember} />
                         </div>
                     );
