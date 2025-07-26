@@ -1,4 +1,4 @@
-import Banner from './components/Banner';
+import Banner from './components/banner';
 import SectionA from './components/sectionA';
 import SectionB from './components/sectionB';
 import SectionNews from './components/sectionNews';
