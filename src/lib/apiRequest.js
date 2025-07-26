@@ -9,8 +9,8 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
       token = await getValidToken();
     }
 
-    const url = new URL(`http://localhost:8080${endpoint}`)
-  
+    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`)
+
     const options = {
       method,
       headers: {}
