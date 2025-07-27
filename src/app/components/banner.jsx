@@ -12,7 +12,7 @@ const Banner = () => {
           alt="Logo linsi"
           className="w-128 h-64 object-contain mx-auto" 
         />
-        <h2 className="text-2xl font-bold text-white"> 
+        <h2 className="text-2xl font-bold text-white xs:px-4 md:px-0"> 
           LABORATORIO DE INNOVACIÓN EN SISTEMAS DE INFORMACIÓN
         </h2>
       </div>
