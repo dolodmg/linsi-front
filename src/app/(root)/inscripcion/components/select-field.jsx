@@ -26,7 +26,7 @@ export const SelectField = ({ value, onChange }) => (
         className="min-w-[194px]"
       >
         {options.map((option) => (
-          <SelectItem key={option.key} value={option.key}>
+          <SelectItem key={option.key} value={option.key} className='text-gray-600'>
             {option.label}
           </SelectItem>
         ))}

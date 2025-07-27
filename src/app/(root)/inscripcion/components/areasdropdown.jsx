@@ -41,7 +41,7 @@ export const AreasDropdown = ({ value, onChange }) => {
           className="min-w-[194px]" 
         >
           {areas.map((area) => (
-            <SelectItem key={area.id} value={area.id}>
+            <SelectItem key={area.id} value={area.id} className="text-gray-600">
               {area.name}
             </SelectItem>
           ))}
