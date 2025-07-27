@@ -5,7 +5,7 @@ import { getValidToken } from "@/util/token";
 export async function apiRequest(endpoint, method = 'GET', body = null, contentType = 'application/json', requiresAuth = true) {
     let token;
 
-    if (requiresAuth) {
+    if (requiresAuth) {   
       token = await getValidToken();
     }
 

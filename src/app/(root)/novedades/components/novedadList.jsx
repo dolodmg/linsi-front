@@ -104,7 +104,7 @@ export const NovedadList = ({ novedades }) => {
                         />
                       ) : (
                         <div className="w-full h-48 flex items-center justify-center bg-gray-200">
-                          <p className="text-gray-500">Sin imagen</p>
+                          <p className="text-gray-500">No hay imagen</p>
                         </div>
                       )}
                     </CardHeader>
