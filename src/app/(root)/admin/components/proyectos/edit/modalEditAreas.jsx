@@ -15,7 +15,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas }) => {
+const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, areas, onUpdateProjectAreas, onUpdateAreasAndMembers }) => {
 
     const [selectedAreas, setSelectedAreas] = useState([]);
     const router = useRouter();
@@ -35,6 +35,11 @@ const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, area
         }
     }, [selectedProject, areasByProject]);
 
+    // Actualizar localAreas cuando cambien las áreas desde el padre
+    useEffect(() => {
+        setLocalAreas(areas);
+    }, [areas]);
+
     if (!selectedProject) return null;
     
     const availableAreas = localAreas.filter(area => 
@@ -53,7 +58,10 @@ const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, area
                     await addAreaToProjectAction(areaId, selectedProject.id);
                 })
             );
-            router.refresh();
+            // Actualizar el estado del proyecto específico
+            if (onUpdateProjectAreas) {
+                await onUpdateProjectAreas(selectedProject.id);
+            }
             onClose();
         } catch (error) {
             console.error('Error al agregar áreas al proyecto', error);
@@ -68,9 +76,12 @@ const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, area
         setIsModalAddOpen(true);
     }
 
-    const handleAddClose = () => {
+    const handleAddClose = async () => {
         setIsModalAddOpen(false);
-        router.refresh();
+        // Actualizar las áreas disponibles cuando se agrega una nueva área
+        if (onUpdateAreasAndMembers) {
+            await onUpdateAreasAndMembers();
+        }
     }
 
     const handleOpenDeleteModal = (area) => {
@@ -78,19 +89,22 @@ const ModalEditAreas = ({ isOpen, onClose, selectedProject, areasByProject, area
         setIsModalDeleteOpen(true);
     }
 
-    const handleDeleteClose = () => {
+    const handleDeleteClose = async () => {
         setIsModalDeleteOpen(false);
-        router.refresh();
+        // Actualizar el estado del proyecto cuando se elimina un área
+        if (onUpdateProjectAreas) {
+            await onUpdateProjectAreas(selectedProject.id);
+        }
     }
 
     const handleAddAreaSuccess = (newArea) => {
         setLocalAreas((prev) => [newArea, ...prev]);
-        router.refresh();
+        // No necesitamos router.refresh() aquí ya que se maneja en handleAddClose
     }
 
     const handleDeleteAreaSuccess = (deletedAreaId) => {
         setProjectAreas((prev) => prev.filter((area) => area.id !== deletedAreaId));
-        router.refresh();
+        // No necesitamos router.refresh() aquí ya que se maneja en handleDeleteClose
     }
 
     return (

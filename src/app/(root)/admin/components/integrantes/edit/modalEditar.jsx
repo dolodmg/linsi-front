@@ -12,7 +12,7 @@ import ImageInput from './imageInput';
 import { useForm, FormProvider } from "react-hook-form";
 import ButtonsAction from '../../buttonsAction';
 
-const ModalEditar = ({ isOpen, onClose }) => {
+const ModalEditar = ({ isOpen, onClose, onEditSuccess }) => {
     const { member } = useMemberEditStore();
     const { 
         firstName, lastName, email, image,
@@ -60,9 +60,20 @@ const ModalEditar = ({ isOpen, onClose }) => {
         }
 
         try {
-            await editMemberAction(member.id, formData);
+            const result = await editMemberAction(member.id, formData);
+            
+            const updatedMember = result && result.id ? result : {
+                ...member,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                s3Url: image instanceof File ? member.s3Url : (image || member.s3Url) 
+            };
+            if (onEditSuccess) {
+                onEditSuccess(updatedMember);
+            }
+            
             onClose();
-            router.refresh();
         } catch (error) {
             console.error('Error al editar el miembro:', error);
             setError(`Error al editar el miembro: ${error.message}`);

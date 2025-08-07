@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
@@ -19,7 +19,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const TableProyectos = ({ projects, membersByProject, areasByProject, members, areas }) => {
+const TableProyectos = ({ projects, membersByProject, areasByProject, members, areas, onUpdateProjectAreas, onUpdateProjectMembers, onUpdateAreasAndMembers }) => {
     const methods = useForm();
     const [isModalDetalleOpen, setIsModalDetalleOpen] = useState(false); 
     const [isModalEditarOpen, setIsModalEditarOpen] = useState(false);
@@ -96,6 +96,18 @@ const TableProyectos = ({ projects, membersByProject, areasByProject, members, a
         setLocalProjects((prevProjects) => prevProjects.filter((project) => project.id !== deletedProjectId));
     };
 
+    const handleEditProjectSuccess = (updatedProject) => {
+        setLocalProjects((prevProjects) => 
+            prevProjects.map((project) => 
+                project.id === updatedProject.id ? updatedProject : project
+            )
+        );
+    };
+
+    useEffect(() => {
+        setLocalProjects(projects);
+    }, [projects]);
+
     return (
         <>
         <AddButton onClick={handleAddProject} component='proyecto' />
@@ -151,10 +163,26 @@ const TableProyectos = ({ projects, membersByProject, areasByProject, members, a
                             ))}
                         </TableBody>
                     </Table>
-                    <ModalEditMembers isOpen={isModalAddMembersOpen} onClose={handleCloseAddMembers} selectedProject={selectedProject} membersByProject={membersByProject} members={members}/>         
-                    <ModalEditAreas isOpen={isModalAddAreasOpen} onClose={handleCloseAddAreas} selectedProject={selectedProject} areasByProject={areasByProject} areas={areas} />
+                    <ModalEditMembers 
+                        isOpen={isModalAddMembersOpen} 
+                        onClose={handleCloseAddMembers} 
+                        selectedProject={selectedProject} 
+                        membersByProject={membersByProject} 
+                        members={members}
+                        onUpdateProjectMembers={onUpdateProjectMembers}
+                        onUpdateAreasAndMembers={onUpdateAreasAndMembers}
+                    />         
+                    <ModalEditAreas 
+                        isOpen={isModalAddAreasOpen} 
+                        onClose={handleCloseAddAreas} 
+                        selectedProject={selectedProject} 
+                        areasByProject={areasByProject} 
+                        areas={areas}
+                        onUpdateProjectAreas={onUpdateProjectAreas}
+                        onUpdateAreasAndMembers={onUpdateAreasAndMembers}
+                    />
                     <ModalDetalle isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} selectedProject={selectedProject} membersByProject={membersByProject} areasByProject={areasByProject} members={members} />
-                    <ModalEditar isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
+                    <ModalEditar isOpen={isModalEditarOpen} onClose={handleCloseEdit} onEditSuccess={handleEditProjectSuccess} />
                     <ModalDeleteProject isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedProject={selectedProject} onDeleteSuccess={handleDeleteProjectSuccess} />
                 </>
             ) : (
