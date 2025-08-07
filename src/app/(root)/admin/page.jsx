@@ -135,6 +135,65 @@ const Admin = () => {
     }, []);
 
 
+    // Funciones para actualizar los estados después de cambios en áreas/miembros
+    const updateProjectAreas = async (projectId) => {
+        try {
+            const projectAreas = await getAreasByProjectAction(projectId);
+            setAreasByProject(prev => ({
+                ...prev,
+                [projectId]: projectAreas || []
+            }));
+        } catch (error) {
+            console.error(`Error al actualizar áreas del proyecto ${projectId}:`, error);
+        }
+    };
+
+    const updateProjectMembers = async (projectId) => {
+        try {
+            const projectMembers = await getMembersByProjectAction(projectId);
+            setMembersByProject(prev => ({
+                ...prev,
+                [projectId]: projectMembers || []
+            }));
+        } catch (error) {
+            console.error(`Error al actualizar miembros del proyecto ${projectId}:`, error);
+        }
+    };
+
+    const updateAreasAndMembers = async () => {
+        try {
+            const [membersData, areasData] = await Promise.all([
+                getMembersAction(),
+                getAreasAction()
+            ]);
+            setMembers(membersData);
+            setAreas(areasData);
+        } catch (error) {
+            console.error('Error al actualizar áreas y miembros:', error);
+        }
+    };
+
+    const updateAreaMembers = async (areaId) => {
+        try {
+            const areaMembers = await getMembersByAreaAction(areaId);
+            setMembersByArea(prev => ({
+                ...prev,
+                [areaId]: areaMembers || []
+            }));
+        } catch (error) {
+            console.error(`Error al actualizar miembros del área ${areaId}:`, error);
+        }
+    };
+
+    const updateMembers = async () => {
+        try {
+            const membersData = await getMembersAction();
+            setMembers(membersData);
+        } catch (error) {
+            console.error('Error al actualizar miembros:', error);
+        }
+    };
+
     if (loading) {
         return <p>Cargando...</p>;
     }
@@ -142,7 +201,21 @@ const Admin = () => {
     return (
         <div className='flex flex-col mx-8'>
             <User />
-            <TabsComponent members={members} projects={projects} areas={areas} news={news} inscriptions={inscriptions} membersByProject={membersByProject} areasByProject={areasByProject} membersByArea={membersByArea}/>
+            <TabsComponent 
+                members={members} 
+                projects={projects} 
+                areas={areas} 
+                news={news} 
+                inscriptions={inscriptions} 
+                membersByProject={membersByProject} 
+                areasByProject={areasByProject} 
+                membersByArea={membersByArea}
+                onUpdateProjectAreas={updateProjectAreas}
+                onUpdateProjectMembers={updateProjectMembers}
+                onUpdateAreasAndMembers={updateAreasAndMembers}
+                onUpdateAreaMembers={updateAreaMembers}
+                onUpdateMembers={updateMembers}
+            />
         </div>
     );
 };

@@ -16,21 +16,14 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 );
 
-const EditModal = ({ isOpen, onClose }) => {
+const EditModal = ({ isOpen, onClose, onEditSuccess }) => {
     const { news } = useNewsEditStore();
     const { setTitle, setDescription, setImage, title, description, image } = useFormStoreNews();
     const router = useRouter();
     const [editing, setEditing] = useState(false);
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
-
-    const methods = useForm({
-        defaultValues: {
-            title: '',
-            description: '',
-            image: ''
-        }
-    });
+    const methods = useForm();
 
     useEffect(() => {
         if (news) {
@@ -71,18 +64,17 @@ const EditModal = ({ isOpen, onClose }) => {
         const formData = new FormData();
             formData.append('title', data.title);
             formData.append('description', data.description);
-            if (image) {
-                if (image instanceof File) {
-                    formData.append('image', image);
-                } else if (typeof image === 'string' && image !== news.s3Url) {
-                    formData.append('image', image);
-                }
+            if (image instanceof File) {
+                formData.append('image', image);
+            } else if (typeof image === 'string') {
+                formData.append('image', image); // incluso si es igual a la original
             }
-            
             try {
-                await editNewsAction(news.id, formData);
+                const result = await editNewsAction(news.id, formData);
+                if (result && onEditSuccess) {
+                    onEditSuccess(result);
+                }
                 onClose();
-                router.refresh();
                 setErrors({});
             } catch (error) {
                 setError(`Error al editar el artículo: ${error.message}`);

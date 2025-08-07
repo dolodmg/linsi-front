@@ -17,7 +17,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 );
 
-const ModalEditar = ({ isOpen, onClose }) => {
+const ModalEditar = ({ isOpen, onClose, onEditSuccess }) => {
     const { project } = useProjectEditStore();
     const { setName, setDescription, setStartDate, setEndDate } = useFormStoreProject();
     const router = useRouter();
@@ -87,9 +87,11 @@ const ModalEditar = ({ isOpen, onClose }) => {
             }
             
             try {
-                await editProjectAction(project.id, formData);
+                const result = await editProjectAction(project.id, formData);
+                if (result && onEditSuccess) {
+                    onEditSuccess(result);
+                }
                 onClose();
-                router.refresh();
                 setErrors({});
             } catch (error) {
                 setError(`Error al editar el proyecto: ${error.message}`);

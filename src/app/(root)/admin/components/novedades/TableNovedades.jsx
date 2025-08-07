@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
@@ -73,6 +73,18 @@ const TableNovedades = ({ news }) => {
     const handleDeleteNewSuccess = (deletedNewId) => {
         setLocalNews((prevNews) => prevNews.filter((newsItem) => newsItem.id !== deletedNewId));
     }
+
+    const handleEditNewSuccess = (updatedNew) => {
+        setLocalNews((prevNews) => 
+            prevNews.map((newsItem) => 
+                newsItem.id === updatedNew.id ? updatedNew : newsItem
+            )
+        );
+    };
+
+    useEffect(() => {
+        setLocalNews(news);
+    }, [news]);
     
     return (
         <>
@@ -115,7 +127,7 @@ const TableNovedades = ({ news }) => {
                             ))}
                         </TableBody>
                     </Table>
-                    <EditModal isOpen={isModalEditarOpen} onClose={handleCloseEdit} />
+                    <EditModal isOpen={isModalEditarOpen} onClose={handleCloseEdit} onEditSuccess={handleEditNewSuccess} />
                     <ModalDeleteNew isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedNew={selectedNew} onDeleteSuccess={handleDeleteNewSuccess} />
                     <DetailModal isOpen={isModalDetailOpen} onClose={handleCloseDetail} selectedNew={selectedNew} />
                 </>

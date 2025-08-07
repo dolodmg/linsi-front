@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inter } from 'next/font/google';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
 import { useForm, FormProvider } from "react-hook-form";
@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ['latin'] },
  { weights: ['400, 500, 600, 700'] }
 );
 
-const TableIntegrantes = ({ members }) => {
+const TableIntegrantes = ({ members, onUpdateMembers }) => {
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -23,6 +23,11 @@ const TableIntegrantes = ({ members }) => {
   const [localMembers, setLocalMembers] = useState(members);
   const { setMemberStore } = useMemberEditStore();
   const methods = useForm();
+
+  // Sincronizar localMembers cuando cambien los members desde el padre
+  useEffect(() => {
+    setLocalMembers(members);
+  }, [members]);
 
   const handleEditClick = (memberToEdit) => {
     setMemberStore(memberToEdit);
@@ -54,6 +59,20 @@ const handleCloseDelete = () => {
 
 const handleAddMemberSuccess = (newMember) => {
   setLocalMembers((prevMembers) => [newMember, ...prevMembers]);
+};
+
+const handleEditMemberSuccess = async (updatedMember) => {
+  // Actualizar el estado local inmediatamente
+  setLocalMembers((prevMembers) => 
+    prevMembers.map((member) => 
+      member.id === updatedMember.id ? updatedMember : member
+    )
+  );
+  
+  // Opcionalmente, también actualizar desde el servidor para asegurar consistencia
+  if (onUpdateMembers) {
+    await onUpdateMembers();
+  }
 };
 
 const handleDeleteMemberSuccess = (deletedMemberId) => {
@@ -102,7 +121,7 @@ const handleDeleteMemberSuccess = (deletedMemberId) => {
               ))}
             </TableBody>
           </Table>
-          <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} />
+          <ModalEditar isOpen={isModalEditOpen} onClose={handleCloseModal} onEditSuccess={handleEditMemberSuccess} />
           <ModalDeleteMember isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedMember={selectedMember} onDeleteSuccess={handleDeleteMemberSuccess} />
         </>
       ) : (

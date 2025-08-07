@@ -15,7 +15,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, members }) => {
+const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, members, onUpdateProjectMembers, onUpdateAreasAndMembers }) => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const router = useRouter();
@@ -35,6 +35,11 @@ const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, 
         }
     }, [selectedProject, membersByProject]);
 
+    // Actualizar localMembers cuando cambien los miembros desde el padre
+    useEffect(() => {
+        setLocalMembers(members);
+    }, [members]);
+
     if (!selectedProject) return null;
     const availableMembers = localMembers.filter(member => 
         !projectMembers.some(projectMember => projectMember.id === member.id)
@@ -52,7 +57,10 @@ const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, 
                     await addMemberToProjectAction(memberId, selectedProject.id);
                 })
             );
-            router.refresh();
+            // Actualizar el estado del proyecto específico
+            if (onUpdateProjectMembers) {
+                await onUpdateProjectMembers(selectedProject.id);
+            }
             onClose();
         } catch (error) {
             console.error('Error al agregar miembros al proyecto', error);
@@ -66,9 +74,12 @@ const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, 
         setIsModalAddOpen(true);
     }
 
-    const handleAddClose = () => {
+    const handleAddClose = async () => {
         setIsModalAddOpen(false);
-        router.refresh();
+        // Actualizar los miembros disponibles cuando se agrega un nuevo miembro
+        if (onUpdateAreasAndMembers) {
+            await onUpdateAreasAndMembers();
+        }
     }
 
     const handleOpenDeleteModal = (member) => {
@@ -76,19 +87,22 @@ const ModalEditMembers = ({ isOpen, onClose, selectedProject, membersByProject, 
         setIsModalDeleteOpen(true);
     }
 
-    const handleDeleteClose = () => {
+    const handleDeleteClose = async () => {
         setIsModalDeleteOpen(false);
-        router.refresh();
+        // Actualizar el estado del proyecto cuando se elimina un miembro
+        if (onUpdateProjectMembers) {
+            await onUpdateProjectMembers(selectedProject.id);
+        }
     }
 
     const handleAddMemberSuccess = (newMember) => {
         setLocalMembers((prev) => [newMember, ...prev]);
-        router.refresh(); 
+        // No necesitamos router.refresh() aquí ya que se maneja en handleAddClose
     };
     
     const handleDeleteMemberSuccess = (deletedMemberId) => {
         setProjectMembers((prev) => prev.filter((member) => member.id !== deletedMemberId));
-        router.refresh();
+        // No necesitamos router.refresh() aquí ya que se maneja en handleDeleteClose
     };
 
     return (

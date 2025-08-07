@@ -62,7 +62,7 @@ const Image = ({ name, defaultValue }) => {
                             </label>
                         </Button>
                         <label className="text-sm text-slate-500 mt-2">
-                            {imageName ? imageName : "Ningún archivo seleccionado"}
+                            {imageName ? imageName : null}
                         </label>
                     </div>
                 </>

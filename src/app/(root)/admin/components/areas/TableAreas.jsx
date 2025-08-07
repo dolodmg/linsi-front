@@ -15,7 +15,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const TableAreas = ({ areas, membersByArea, members }) => {
+const TableAreas = ({ areas, membersByArea, members, onUpdateAreaMembers, onUpdateAreasAndMembers }) => {
     const methods = useForm();
     const [localAreas, setLocalAreas] = useState(areas);
     const [selectedArea, setSelectedArea] = useState(null);
@@ -91,7 +91,15 @@ const TableAreas = ({ areas, membersByArea, members }) => {
                                 ))}
                             </TableBody>
                         </Table>
-                        <ModalAddMembers isOpen={isModalAddOpen} onClose={handleCloseAdd} selectedArea={selectedArea} membersByArea={membersByArea} members={members} />
+                        <ModalAddMembers 
+                            isOpen={isModalAddOpen} 
+                            onClose={handleCloseAdd} 
+                            selectedArea={selectedArea} 
+                            membersByArea={membersByArea} 
+                            members={members}
+                            onUpdateAreaMembers={onUpdateAreaMembers}
+                            onUpdateAreasAndMembers={onUpdateAreasAndMembers}
+                        />
                         <ModalDeleteArea isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedArea={selectedArea} onDeleteSuccess={handleDeleteAreaSuccess} />
                     </>
                 ) : (

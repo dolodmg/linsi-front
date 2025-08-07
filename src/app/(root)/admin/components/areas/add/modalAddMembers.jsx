@@ -15,7 +15,7 @@ const inter = Inter(
     { weights: ['400, 500, 600, 700'] }
 )
 
-const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members }) => {
+const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members, onUpdateAreaMembers, onUpdateAreasAndMembers }) => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const router = useRouter();
@@ -34,6 +34,11 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
         }
     }, [selectedArea, membersByArea]);
 
+    // Actualizar localMembers cuando cambien los miembros desde el padre
+    useEffect(() => {
+        setLocalMembers(members);
+    }, [members]);
+
     if (!selectedArea) return null;
     const availableMembers = localMembers.filter(member => 
         !areaMembers.some(areaMember => areaMember.id === member.id)
@@ -51,7 +56,10 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
                     await addMemberToAreaAction(memberId, selectedArea.id);
                 })
             );
-            router.refresh();
+            // Actualizar el estado del área específica
+            if (onUpdateAreaMembers) {
+                await onUpdateAreaMembers(selectedArea.id);
+            }
             onClose();
         } catch (error) {
             console.error('Error al agregar miembros al área', error);
@@ -65,9 +73,12 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
         setIsModalAddOpen(true);
     }
 
-    const handleAddClose = () => {
+    const handleAddClose = async () => {
         setIsModalAddOpen(false);
-        router.refresh();
+        // Actualizar los miembros disponibles cuando se agrega un nuevo miembro
+        if (onUpdateAreasAndMembers) {
+            await onUpdateAreasAndMembers();
+        }
     }
 
     const handleOpenDeleteModal = (member) => {
@@ -75,19 +86,22 @@ const ModalAddMembers = ({ isOpen, onClose, selectedArea, membersByArea, members
         setIsModalDeleteOpen(true);
     }
 
-    const handleDeleteClose = () => {
+    const handleDeleteClose = async () => {
         setIsModalDeleteOpen(false);
-        router.refresh();
+        // Actualizar el estado del área cuando se elimina un miembro
+        if (onUpdateAreaMembers) {
+            await onUpdateAreaMembers(selectedArea.id);
+        }
     }
 
     const handleAddMemberSuccess = (newMember) => {
         setLocalMembers((prev) => [newMember, ...prev]);
-        router.refresh(); 
+        // No necesitamos router.refresh() aquí ya que se maneja en handleAddClose
     };
     
     const handleDeleteMemberSuccess = (deletedMemberId) => {
         setAreaMembers((prev) => prev.filter((member) => member.id !== deletedMemberId));
-        router.refresh();
+        // No necesitamos router.refresh() aquí ya que se maneja en handleDeleteClose
     };
 
     return (
