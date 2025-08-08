@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Header } from '../../../components/ui/header';
-import { NovedadList } from '../../../components/news/novedadList';
-import { NewsSkeleton } from '../../../components/news/newsSkeleton';
-import { NovedadModal } from '../../../components/news/NovedadModal';
+import { Header } from '@/components/ui/header';
+import { NovedadList } from '@/components/news/novedadList';
+import { NewsSkeleton } from '@/components/news/newsSkeleton';
+import { NovedadModal } from '@/components/news/NovedadModal';
 import { Divider } from '@nextui-org/react';
-import { LinkInicio } from '@/components/linkInicio';
+import { LinkInicio } from '@/components/ui/linkInicio';
 import { getAllNewsAction } from '@/actions/news';
 
 

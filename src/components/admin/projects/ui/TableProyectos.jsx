@@ -1,0 +1,199 @@
+"use client";
+import React, { useState, useEffect } from 'react';
+import { Inter } from 'next/font/google';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Card } from '@nextui-org/react';
+import { useForm, FormProvider } from "react-hook-form";
+import EditIcon from '@mui/icons-material/Edit';
+import ModalEditar from '@/components/admin/projects/edit/modalEditar'; 
+import ModalDetalle from './modalDetalle';
+import ModalDeleteProject from '@/components/admin/projects/delete/modalDeleteProject';
+import ModalAddProject from '@/components/admin/projects/add/modalAddProject';
+import ModalEditMembers from '@/components/admin/projects/edit/modalEditMembers';
+import ModalEditAreas from '@/components/admin/projects/edit/modalEditAreas';
+import { useProjectEditStore } from "@/store/store";
+import DeleteButton from '@/components/admin/ui/deleteButton';
+import AddButton from '@/components/admin/ui/addButton';
+
+const inter = Inter(
+    { subsets: ['latin'] },
+    { weights: ['400, 500, 600, 700'] }
+)
+
+const TableProyectos = ({ projects, membersByProject, areasByProject, members, areas, onUpdateProjectAreas, onUpdateProjectMembers, onUpdateAreasAndMembers }) => {
+    const methods = useForm();
+    const [isModalDetalleOpen, setIsModalDetalleOpen] = useState(false); 
+    const [isModalEditarOpen, setIsModalEditarOpen] = useState(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+    const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [isModalAddMembersOpen, setIsModalAddMembersOpen] = useState(false);
+    const [isModalAddAreasOpen, setIsModalAddAreasOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [localProjects, setLocalProjects] = useState(projects);
+    const { setProjectStore } = useProjectEditStore();
+
+    const handleCloseModalDetalle = () => {
+        setIsModalDetalleOpen(false);  
+        setSelectedProject(null);
+    };
+
+    const handleEditClick = (projectToEdit) => {
+        setProjectStore(projectToEdit);
+        setIsModalEditarOpen(true);    
+    };
+
+    const handleCloseEdit = () => {
+        setIsModalEditarOpen(false);   
+    };
+
+    const handleDeleteModal = (projectItem) => {
+        setIsModalDeleteOpen(true);
+        setSelectedProject(projectItem);
+    }
+
+    const handleCloseDelete = () => {
+        setIsModalDeleteOpen(false);
+        setSelectedProject(null);
+    }
+
+    const handleAddProject = () => {
+        setIsModalAddOpen(true);
+    }
+
+    const handleCloseAdd = () => {
+        setIsModalAddOpen(false);
+    }
+
+    const handleCloseAddMembers = () => {
+        setIsModalAddMembersOpen(false);
+        setSelectedProject(null);
+    } 
+
+    const handleMembersClick = (projectItem) => {
+        setIsModalDetalleOpen(true);   
+        setSelectedProject(projectItem);
+    };
+
+    const handleMembersAddClick = (projectItem) => {
+        setIsModalAddMembersOpen(true);
+        setSelectedProject(projectItem);
+    }
+
+    const handleCloseAddAreas = () => {
+        setIsModalAddAreasOpen(false);
+        setSelectedProject(null);
+    }
+
+    const handleAddAreasClick = (projectItem) => {
+        setIsModalAddAreasOpen(true);
+        setSelectedProject(projectItem);
+    }
+
+    const handleAddProjectSuccess = (newProject) => {
+        setLocalProjects((prevProjects) => [newProject, ...prevProjects]);
+    };    
+
+    const handleDeleteProjectSuccess = (deletedProjectId) => {
+        setLocalProjects((prevProjects) => prevProjects.filter((project) => project.id !== deletedProjectId));
+    };
+
+    const handleEditProjectSuccess = (updatedProject) => {
+        setLocalProjects((prevProjects) => 
+            prevProjects.map((project) => 
+                project.id === updatedProject.id ? updatedProject : project
+            )
+        );
+    };
+
+    useEffect(() => {
+        setLocalProjects(projects);
+    }, [projects]);
+
+    return (
+        <>
+        <AddButton onClick={handleAddProject} component='proyecto' />
+        <FormProvider {...methods}>
+            {projects.length > 0 ? (
+                <>
+                    <Table aria-label="Lista de proyectos" className='mt-2'>
+                        <TableHeader>
+                            <TableColumn>TÍTULO</TableColumn>
+                            <TableColumn>FECHA INICIO</TableColumn>
+                            <TableColumn>FECHA FIN</TableColumn>
+                            <TableColumn>INTEGRANTES</TableColumn>
+                            <TableColumn>ÁREAS</TableColumn>
+                            <TableColumn>MÁS INFORMACIÓN</TableColumn>
+                            <TableColumn>ACCIONES</TableColumn>
+                        </TableHeader>
+                        <TableBody>
+                            {localProjects.map((projectItem) => (
+                                <TableRow key={projectItem.id}>
+                                    <TableCell className={`${inter.className} text-black`}>{projectItem.name}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>{projectItem.startDate}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>{projectItem.endDate}</TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>
+                                        <div className='flex gap-2'>
+                                            <button className='bg-white p-1 text-bg-blue' aria-label='Modificar integrantes' onClick={() => handleMembersAddClick(projectItem)}>
+                                                <EditIcon fontSize='small'/> Modificar
+                                            </button>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>
+                                        <div className='flex'>
+                                            <button className='bg-white p-1 text-bg-blue' aria-label='Modificar áreas' onClick={() => handleAddAreasClick(projectItem)}>
+                                                <EditIcon fontSize='small'/> Modificar
+                                            </button>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className={`${inter.className} text-black`}>
+                                    <Button className='bg-bg-blue text-white' size='md' onClick={() => handleMembersClick(projectItem)}>
+                                        Ver detalle
+                                    </Button>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className='flex gap-1'>
+                                            <button
+                                            onClick={() => handleEditClick(projectItem)}
+                                            className='p-1 bg-white text-bg-blue'>
+                                                <EditIcon />
+                                            </button>
+                                            <DeleteButton onClick={() => handleDeleteModal(projectItem)} />
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <ModalEditMembers 
+                        isOpen={isModalAddMembersOpen} 
+                        onClose={handleCloseAddMembers} 
+                        selectedProject={selectedProject} 
+                        membersByProject={membersByProject} 
+                        members={members}
+                        onUpdateProjectMembers={onUpdateProjectMembers}
+                        onUpdateAreasAndMembers={onUpdateAreasAndMembers}
+                    />         
+                    <ModalEditAreas 
+                        isOpen={isModalAddAreasOpen} 
+                        onClose={handleCloseAddAreas} 
+                        selectedProject={selectedProject} 
+                        areasByProject={areasByProject} 
+                        areas={areas}
+                        onUpdateProjectAreas={onUpdateProjectAreas}
+                        onUpdateAreasAndMembers={onUpdateAreasAndMembers}
+                    />
+                    <ModalDetalle isOpen={isModalDetalleOpen} onClose={handleCloseModalDetalle} selectedProject={selectedProject} membersByProject={membersByProject} areasByProject={areasByProject} members={members} />
+                    <ModalEditar isOpen={isModalEditarOpen} onClose={handleCloseEdit} onEditSuccess={handleEditProjectSuccess} />
+                    <ModalDeleteProject isOpen={isModalDeleteOpen} onClose={handleCloseDelete} selectedProject={selectedProject} onDeleteSuccess={handleDeleteProjectSuccess} />
+                </>
+            ) : (
+                <Card className='mt-2'>
+                    <p className={`${inter.className} text-gray-400 text-sm px-2 py-2`}>No hay proyectos registrados</p>
+                </Card>
+            )}
+        </FormProvider>
+        <ModalAddProject isOpen={isModalAddOpen} onClose={handleCloseAdd} onAddSuccess={handleAddProjectSuccess} />
+    </>
+    )
+}
+
+export default TableProyectos; 

@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { TabsComponent } from './components/tabs';
-import { User } from './components/user';
+import { TabsComponent } from '@/components/admin/ui/tabs';
+import { User } from '@/components/admin/ui/user';
 import { getMembersAction } from '@/actions/member';
 import { getProjectsAction } from '@/actions/project';
 import { getAreasAction } from '@/actions/area';
