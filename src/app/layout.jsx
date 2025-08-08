@@ -1,8 +1,8 @@
 import React from "react";
 import localFont from "next/font/local";
-import Navbar from "./components/navbar";
+import Navbar from "../components/ui/navbar";
 import "./globals.css";
-import Footer from "./components/footer";
+import Footer from "../components/ui/footer";
 import { NextUIProvider } from "@nextui-org/react";
 import { AuthProvider } from "@/context/AuthContext";
 

@@ -1,9 +1,8 @@
-import Banner from './components/banner';
-import SectionA from './components/sectionA';
-import SectionB from './components/sectionB';
-import SectionNews from './components/sectionNews';
-import SectionC
- from './components/sectionC';
+import Banner from '@/components/ui/banner';
+import SectionA from '@/components/ui/sectionA';
+import SectionB from '@/components/ui/sectionB';
+import SectionNews from '@/components/ui/sectionNews';
+import SectionC from '@/components/ui/sectionC';
 export default function Home() {
   return (
     <div>
