@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Header } from '../../components/header';
 import { NovedadList } from './components/novedadList';
+import { NewsSkeleton } from './components/newsSkeleton';
 import { NovedadModal } from './components/NovedadModal';
 import { Divider } from '@nextui-org/react';
 import { LinkInicio } from '@/app/components/linkInicio';
@@ -38,7 +39,16 @@ const Novedades = () => {
     setSelectedNovedad(null); // Cerrar el modal al limpiar la novedad seleccionada
   };
 
-  if (loading) return <p>Cargando...</p>;
+  if (loading) return (
+    <div className="flex flex-col bg-bg-light-grey">
+      <Header headerName="NOVEDADES" />
+      <div className="mx-8 mb-4">
+        <LinkInicio />
+        <Divider />
+        <NewsSkeleton count={3} />
+      </div>
+    </div>
+  );
   if (error) return <p>{error}</p>;
 
   return (

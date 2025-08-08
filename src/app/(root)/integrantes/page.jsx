@@ -48,7 +48,6 @@ const Integrantes = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
 
     return (
@@ -58,7 +57,7 @@ const Integrantes = () => {
                 <LinkInicio/>
                 <Divider/>
                 <div className='flex flex-col justify-center items-center'>
-                    <RoleName roles={roles} members={members} areasByMember={areasByMember}/>
+                    <RoleName roles={roles} members={members} areasByMember={areasByMember} loading={loading}/>
                 </div>
             </div>
         </div>
