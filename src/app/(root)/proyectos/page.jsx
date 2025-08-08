@@ -4,6 +4,7 @@ import { Header } from "../../components/header";
 import { Divider } from "@nextui-org/react";
 import { Bree_Serif } from "next/font/google";
 import { ProjectContainer } from "./components/projectContainer";
+import { ProjectSkeleton } from "./components/projectSkeleton";
 import { LinkInicio } from "@/app/components/linkInicio";
 import { getProjectsAction } from "@/actions/project";
 
@@ -31,8 +32,6 @@ const Proyectos = () => {
     fetchProjects();
   }, []);
 
-  if (loading) return <p className="text-center mt-20">Cargando...</p>;
-
   return (
     <div className="flex flex-col min-h-screen bg-bg-light-grey">
       <Header headerName="PROYECTOS" />
@@ -45,7 +44,9 @@ const Proyectos = () => {
             Proyectos en desarrollo
           </h1>
           <div className="w-full max-w-4xl my-4">
-            {projects.some((project) => project.endDate == null) ? (
+            {loading ? (
+              <ProjectSkeleton count={3} />
+            ) : projects.some((project) => project.endDate == null) ? (
               <div className="flex flex-col gap-4">
                 {projects.map(
                   (project) =>
@@ -68,7 +69,9 @@ const Proyectos = () => {
             Proyectos finalizados
           </h1>
           <div className="w-full max-w-4xl my-4">
-            {projects.some((project) => project.endDate != null) ? (
+            {loading ? (
+              <ProjectSkeleton count={2} />
+            ) : projects.some((project) => project.endDate != null) ? (
               <div className="flex flex-col gap-4">
                 {projects.map(
                   (project) =>

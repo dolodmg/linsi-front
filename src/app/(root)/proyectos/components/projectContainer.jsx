@@ -6,13 +6,17 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Typography from "@mui/material/Typography";
+import { ProjectSkeleton } from "./projectSkeleton";
 
 const inter = Inter(
   { subsets: ["latin"] },
   { weight: "400" }
 );
 
-export const ProjectContainer = ({ project }) => {
+export const ProjectContainer = ({ project, loading }) => {
+  if (loading) {
+    return <ProjectSkeleton count={3} />;
+  }
   return (
     <div className="w-full">
       <Accordion
@@ -23,10 +27,10 @@ export const ProjectContainer = ({ project }) => {
           expandIcon={<ArrowDropDownIcon />}
           aria-controls={`panel-${project.id}-content`}
           id={`panel-${project.id}-header`}
-          className="bg-gray-200 px-6 py-4"
+          className="bg-gray-200 px-6 py-2"
         >
           <Typography
-            className={`${inter.className} font-medium text-lg`}
+            className={`${inter.className} font-medium text-md`}
           >
             {project.name}
           </Typography>

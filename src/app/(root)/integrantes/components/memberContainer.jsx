@@ -2,12 +2,16 @@
 import React from 'react';
 import { Card, CardHeader, Divider } from '@nextui-org/react';
 import { Inter } from 'next/font/google';
+import { MemberSkeleton } from './memberSkeleton';
 
 const inter = Inter(
     {subsets: ['latin']},
     {weight: '400'});
 
-export const MemberContainer = ({ members, areasByMember }) => {
+export const MemberContainer = ({ members, areasByMember, loading }) => {
+    if (loading) {
+        return <MemberSkeleton count={members?.length || 4} />;
+    }
     if (!members || members.length === 0) {
         return (
             <div className='max-w-4xl flex flex-row items-center w-2/3 mt-16'>

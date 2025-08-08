@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getNewsAction } from "@/actions/news";
 import { IoArrowBack, IoTimeOutline, IoCalendarOutline } from "react-icons/io5";
 import ImageModal from "@/app/components/imageModal";
+import { NewsDetailSkeleton } from "../components/newsDetailSkeleton";
 
 const NovedadDetalle = ({ params }) => {
   const { id } = params;
@@ -29,14 +30,7 @@ const NovedadDetalle = ({ params }) => {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Cargando artículo...</p>
-        </div>
-      </div>
-    );
+    return <NewsDetailSkeleton />;
   }
 
   if (error) {
